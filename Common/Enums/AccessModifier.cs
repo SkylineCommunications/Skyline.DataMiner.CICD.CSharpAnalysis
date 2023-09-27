@@ -2,13 +2,13 @@
 {
     using System;
 
-	/// <summary>
-	/// Represents access modifiers.
-	/// </summary>
-	/// <remarks>
-	/// <seealso href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/accessibility-levels"/>
-	/// </remarks>
-	[Flags]
+    /// <summary>
+    /// Represents access modifiers.
+    /// </summary>
+    /// <remarks>
+    /// <seealso href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/accessibility-levels"/>
+    /// </remarks>
+    [Flags]
     public enum AccessModifier
     {
         /// <summary>
@@ -32,6 +32,6 @@
         /// Internal.
         /// </summary>
         Internal = 8,
-        //ProtectedInteral = 12,
+        //ProtectedInternal = 12,
     }
 }

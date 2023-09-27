@@ -1,23 +1,23 @@
 ﻿namespace Skyline.DataMiner.CICD.CSharpAnalysis
 {
-	using System;
-	using System.Collections.Concurrent;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Reflection;
-	using System.Threading.Tasks;
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
 
-	using Microsoft.CodeAnalysis;
-	using Microsoft.CodeAnalysis.CSharp;
-	using Microsoft.CodeAnalysis.CSharp.Scripting;
-	using Microsoft.CodeAnalysis.CSharp.Syntax;
-	using Microsoft.CodeAnalysis.FindSymbols;
-	using Microsoft.CodeAnalysis.Scripting;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
+    using Microsoft.CodeAnalysis.CSharp.Scripting;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using Microsoft.CodeAnalysis.FindSymbols;
+    using Microsoft.CodeAnalysis.Scripting;
 
-	using Skyline.DataMiner.CICD.CSharpAnalysis.Classes;
-	using Skyline.DataMiner.CICD.CSharpAnalysis.Enums;
+    using Skyline.DataMiner.CICD.CSharpAnalysis.Classes;
+    using Skyline.DataMiner.CICD.CSharpAnalysis.Enums;
 
-	using SSkyline.DataMiner.CICD.CSharpAnalysis;
+    using SSkyline.DataMiner.CICD.CSharpAnalysis;
 
     /// <summary>
     /// Roslyn helper class.
@@ -63,13 +63,13 @@
             }
         }
 
-		/// <summary>
-		/// Tries parsing the specified value.
-		/// </summary>
-		/// <param name="value">The value.</param>
-		/// <param name="access">The access modifier.</param>
-		/// <returns><c>true</c> if the parse succeeded; otherwise, <c>false</c>.</returns>
-		public static bool TryParseAccess(SyntaxKind value, out AccessModifier access)
+        /// <summary>
+        /// Tries parsing the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="access">The access modifier.</param>
+        /// <returns><c>true</c> if the parse succeeded; otherwise, <c>false</c>.</returns>
+        public static bool TryParseAccess(SyntaxKind value, out AccessModifier access)
         {
             switch (value)
             {
@@ -145,16 +145,16 @@
             }
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="symbol">The symbol.</param>
-		/// <param name="semanticModel">The semantic model.</param>
-		/// <param name="solution">The solution.</param>
-		/// <param name="assemblyName">The assembly name.</param>
-		/// <param name="namespace">The namespace.</param>
-		/// <returns><c>true</c> if the symbol is of the specified type; otherwise, <c>false</c>.</returns>
-		public static bool CheckIfCertainClass(ISymbol symbol, SemanticModel semanticModel, Solution solution, string assemblyName, string @namespace)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="semanticModel">The semantic model.</param>
+        /// <param name="solution">The solution.</param>
+        /// <param name="assemblyName">The assembly name.</param>
+        /// <param name="namespace">The namespace.</param>
+        /// <returns><c>true</c> if the symbol is of the specified type; otherwise, <c>false</c>.</returns>
+        public static bool CheckIfCertainClass(ISymbol symbol, SemanticModel semanticModel, Solution solution, string assemblyName, string @namespace)
         {
             if (symbol == null || @namespace == null)
             {
@@ -386,15 +386,15 @@
             return false;
         }
 
-		/// <summary>
-		/// Tries retrieving the variable assignment.
-		/// </summary>
-		/// <param name="expression">The expression.</param>
-		/// <param name="semanticModel">The semantic model.</param>
-		/// <param name="solution">The solution</param>
-		/// <param name="assignmentExpression">The assignment expression.</param>
-		/// <returns><c>true</c> if the expression could be retrieved; otherwise, <c>false</c>.</returns>
-		public static bool TryGetVariableAssignment(AssignmentExpressionSyntax expression, SemanticModel semanticModel, Solution solution, out ExpressionSyntax assignmentExpression)
+        /// <summary>
+        /// Tries retrieving the variable assignment.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <param name="semanticModel">The semantic model.</param>
+        /// <param name="solution">The solution</param>
+        /// <param name="assignmentExpression">The assignment expression.</param>
+        /// <returns><c>true</c> if the expression could be retrieved; otherwise, <c>false</c>.</returns>
+        public static bool TryGetVariableAssignment(AssignmentExpressionSyntax expression, SemanticModel semanticModel, Solution solution, out ExpressionSyntax assignmentExpression)
         {
             assignmentExpression = null;
             ISymbol symbol;
@@ -454,21 +454,21 @@
             {
                 // Not implemented yet
             }
-            
+
             return false;
         }
 
 
-		/// <summary>
-		/// Tries parsing the specified expression as a value.
-		/// </summary>
-		/// <param name="expression">The expression.</param>
-		/// <param name="value">The value.</param>
-		/// <returns><c>true</c> if the parse succeeded; otherwise, <c>false</c>.</returns>
-		/// <remarks>
-		/// Lite version of the TryParseValue that doesn't need the semantic model and solution. Currently this will only work for LiteralExpressionSyntax.
-		/// </remarks>
-		public static bool TryParseValue(ExpressionSyntax expression, out Value value)
+        /// <summary>
+        /// Tries parsing the specified expression as a value.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <param name="value">The value.</param>
+        /// <returns><c>true</c> if the parse succeeded; otherwise, <c>false</c>.</returns>
+        /// <remarks>
+        /// Lite version of the TryParseValue that doesn't need the semantic model and solution. Currently this will only work for LiteralExpressionSyntax.
+        /// </remarks>
+        public static bool TryParseValue(ExpressionSyntax expression, out Value value)
         {
             bool succeeded = false;
             value = null;
@@ -492,16 +492,16 @@
             return succeeded;
         }
 
-		/// <summary>
-		/// Tries parsing the specified expression as a value.
-		/// </summary>
-		/// <param name="expression">The expression.</param>
-		/// <param name="semanticModel">The semantic model.</param>
-		/// <param name="solution">The solution.</param>
-		/// <param name="value">The value.</param>
-		/// <returns><c>true</c> if the parse succeeded; otherwise, <c>false</c>.</returns>
-		/// <exception cref="NotImplementedException"></exception>
-		public static bool TryParseValue(ExpressionSyntax expression, SemanticModel semanticModel, Solution solution, out Value value)
+        /// <summary>
+        /// Tries parsing the specified expression as a value.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <param name="semanticModel">The semantic model.</param>
+        /// <param name="solution">The solution.</param>
+        /// <param name="value">The value.</param>
+        /// <returns><c>true</c> if the parse succeeded; otherwise, <c>false</c>.</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static bool TryParseValue(ExpressionSyntax expression, SemanticModel semanticModel, Solution solution, out Value value)
         {
             bool succeeded = false;
             value = null;
@@ -868,12 +868,12 @@
             return succeeded;
         }
 
-		/// <summary>
-		/// Retrieves the expression from the parenthesized expression syntax.
-		/// </summary>
-		/// <param name="expr">The expression.</param>
-		/// <returns>The expression from the parenthesized expression syntax.</returns>
-		private static ExpressionSyntax GetExpressionFromParenthesesOrDefault(ExpressionSyntax expr)
+        /// <summary>
+        /// Retrieves the expression from the parenthesized expression syntax.
+        /// </summary>
+        /// <param name="expr">The expression.</param>
+        /// <returns>The expression from the parenthesized expression syntax.</returns>
+        private static ExpressionSyntax GetExpressionFromParenthesesOrDefault(ExpressionSyntax expr)
         {
             // Get expression inside parentheses
             if (!(expr is ParenthesizedExpressionSyntax))

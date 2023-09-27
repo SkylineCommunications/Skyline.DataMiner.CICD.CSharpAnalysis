@@ -1,15 +1,15 @@
 ﻿namespace Skyline.DataMiner.CICD.CSharpAnalysis.Classes
 {
-	using System.Collections.Generic;
+    using System.Collections.Generic;
 
-	using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-	using Skyline.DataMiner.CICD.CSharpAnalysis.Enums;
+    using Skyline.DataMiner.CICD.CSharpAnalysis.Enums;
 
-	/// <summary>
-	/// Represents an indexer.
-	/// </summary>
-	public class IndexerClass : CSharpObject<IndexerDeclarationSyntax>
+    /// <summary>
+    /// Represents an indexer.
+    /// </summary>
+    public class IndexerClass : CSharpObject<IndexerDeclarationSyntax>
     {
         internal IndexerClass(IndexerDeclarationSyntax node) : base(node)
         {
@@ -17,11 +17,11 @@
             Parameters = new List<Parameter>();
         }
 
-		/// <summary>
-		/// Gets the return type.
-		/// </summary>
-		/// <value>The return type.</value>
-		public string ReturnType { get; private set; }
+        /// <summary>
+        /// Gets the return type.
+        /// </summary>
+        /// <value>The return type.</value>
+        public string ReturnType { get; private set; }
 
         /// <summary>
         /// Gets the access modifier.
@@ -29,17 +29,17 @@
         /// <value>The access modifier.</value>
         public AccessModifier Access { get; private set; }
 
-		/// <summary>
-		/// Gets a value indicating whether this is a getter.
-		/// </summary>
-		/// <value><c>true</c> if this is a getter;otherwise, <c>false</c>.</value>
-		public bool IsGetter { get; private set; }
+        /// <summary>
+        /// Gets a value indicating whether this is a getter.
+        /// </summary>
+        /// <value><c>true</c> if this is a getter;otherwise, <c>false</c>.</value>
+        public bool IsGetter { get; private set; }
 
-		/// <summary>
-		/// Gets a value indicating whether this is a setter.
-		/// </summary>
-		/// <value><c>true</c> if this is a setter;otherwise, <c>false</c>.</value>
-		public bool IsSetter { get; private set; }
+        /// <summary>
+        /// Gets a value indicating whether this is a setter.
+        /// </summary>
+        /// <value><c>true</c> if this is a setter;otherwise, <c>false</c>.</value>
+        public bool IsSetter { get; private set; }
 
         /// <summary>
         /// Gets the parameters.

@@ -1,16 +1,16 @@
 ﻿namespace Skyline.DataMiner.CICD.CSharpAnalysis.Classes
 {
-	using System;
+    using System;
 
-	using Interfaces;
+    using Microsoft.CodeAnalysis;
 
-	using Microsoft.CodeAnalysis;
+    using Skyline.DataMiner.CICD.CSharpAnalysis.Interfaces;
 
-	/// <summary>
-	/// Represents a C# object.
-	/// </summary>
-	/// <typeparam name="T">The type.</typeparam>
-	public class CSharpObject<T> : ICSharpObject<T> where T: SyntaxNode
+    /// <summary>
+    /// Represents a C# object.
+    /// </summary>
+    /// <typeparam name="T">The type.</typeparam>
+    public class CSharpObject<T> : ICSharpObject<T> where T : SyntaxNode
     {
         /// <summary>
         /// With this constructor you need to set the SyntaxNode manually.

@@ -4,6 +4,7 @@
 
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
+
     using Skyline.DataMiner.CICD.CSharpAnalysis.Enums;
 
     /// <summary>
@@ -24,34 +25,34 @@
         /// <value>The name.</value>
         public string Name { get; private set; }
 
-		/// <summary>
-		/// Gets the access modifier.
-		/// </summary>
-		/// <value>The access modifier.</value>
-		public AccessModifier Access { get; private set; }
+        /// <summary>
+        /// Gets the access modifier.
+        /// </summary>
+        /// <value>The access modifier.</value>
+        public AccessModifier Access { get; private set; }
 
-		/// <summary>
-		/// Gets the methods of the interface.
-		/// </summary>
-		/// <value>The methods of the interface.</value>
-		public List<MethodClass> Methods { get; }
+        /// <summary>
+        /// Gets the methods of the interface.
+        /// </summary>
+        /// <value>The methods of the interface.</value>
+        public List<MethodClass> Methods { get; }
 
-		/// <summary>
-		/// Gets the properties of the interface.
-		/// </summary>
-		/// <value>The properties of the interface.</value>
-		public List<PropertyClass> Properties { get; }
+        /// <summary>
+        /// Gets the properties of the interface.
+        /// </summary>
+        /// <value>The properties of the interface.</value>
+        public List<PropertyClass> Properties { get; }
 
-		//public List<IndexerClass> Indexers { get; }
+        //public List<IndexerClass> Indexers { get; }
 
-		//public List<object> Events { get; }
+        //public List<object> Events { get; }
 
-		/// <summary>
-		/// Gets a value indicating whether this is a partial interface.
-		/// </summary>
-		/// <value><c>true</c> if this is a partial interface;otherwise, <c>false</c>.</value>
-		public bool IsPartial { get; private set; }
-        
+        /// <summary>
+        /// Gets a value indicating whether this is a partial interface.
+        /// </summary>
+        /// <value><c>true</c> if this is a partial interface;otherwise, <c>false</c>.</value>
+        public bool IsPartial { get; private set; }
+
         internal static InterfaceClass Parse(InterfaceDeclarationSyntax node)
         {
             var @interface = new InterfaceClass(node)

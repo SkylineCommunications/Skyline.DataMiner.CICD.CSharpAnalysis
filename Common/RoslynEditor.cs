@@ -1,6 +1,6 @@
 ﻿namespace SSkyline.DataMiner.CICD.CSharpAnalysis
 {
-	using System;
+    using System;
     using System.Collections.Generic;
 
     using Microsoft.CodeAnalysis;
@@ -72,7 +72,7 @@
                     return null;
             }
         }
-        
+
         /// <summary>
         /// Converts the value to an Argument with every part resolved (variables filled in).
         /// </summary>
@@ -106,7 +106,7 @@
 
                 SeparatedSyntaxList<ExpressionSyntax> separatedSyntaxList = new SeparatedSyntaxList<ExpressionSyntax>();
                 separatedSyntaxList = separatedSyntaxList.AddRange(innerArrayParts);
-                
+
                 var initializer = SyntaxFactory.InitializerExpression(SyntaxKind.ArrayInitializerExpression, separatedSyntaxList);
 
                 var arrayExpression = SyntaxFactory.ImplicitArrayCreationExpression(initializer);

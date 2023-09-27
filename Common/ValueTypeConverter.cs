@@ -37,7 +37,7 @@
                 case Value.ValueType.Decimal: return "decimal";
                 case Value.ValueType.Boolean: return "bool";
                 case Value.ValueType.DateTime: return "DateTime";
-                
+
                 default: return String.Empty;
             }
         }
@@ -112,12 +112,12 @@
             }
         }
 
-		/// <summary>
-		/// Retrieves the syntax kind of the specified value type.
-		/// </summary>
-		/// <param name="kind">The value type.</param>
-		/// <returns>The syntax kind.</returns>
-		public static SyntaxKind GetSyntaxKind(Value.ValueType valueType)
+        /// <summary>
+        /// Retrieves the syntax kind of the specified value type.
+        /// </summary>
+        /// <param name="kind">The value type.</param>
+        /// <returns>The syntax kind.</returns>
+        public static SyntaxKind GetSyntaxKind(Value.ValueType valueType)
         {
             switch (valueType)
             {
@@ -140,12 +140,12 @@
             }
         }
 
-		/// <summary>
-		/// Retrieves the value type of the specified special type.
-		/// </summary>
-		/// <param name="kind">The special type.</param>
-		/// <returns>The value type.</returns>
-		public static Value.ValueType GetValueType(SpecialType specialType)
+        /// <summary>
+        /// Retrieves the value type of the specified special type.
+        /// </summary>
+        /// <param name="kind">The special type.</param>
+        /// <returns>The value type.</returns>
+        public static Value.ValueType GetValueType(SpecialType specialType)
         {
             switch (specialType)
             {

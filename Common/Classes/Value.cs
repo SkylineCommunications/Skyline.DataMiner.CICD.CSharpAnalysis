@@ -1,14 +1,14 @@
 ﻿namespace Skyline.DataMiner.CICD.CSharpAnalysis.Classes
 {
-	using System;
-	using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
 
-	using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis;
 
-	/// <summary>
-	/// Represents a value.
-	/// </summary>
-	public class Value : CSharpObject<SyntaxNode>
+    /// <summary>
+    /// Represents a value.
+    /// </summary>
+    public class Value : CSharpObject<SyntaxNode>
     {
         /// <summary>
         /// Gets the symbol.
@@ -22,12 +22,12 @@
         /// <value>The object.</value>
         public object Object { get; internal set; }
 
-		/// <summary>
-		/// Gets the array.
-		/// </summary>
+        /// <summary>
+        /// Gets the array.
+        /// </summary>
         /// <value>The array.</value>
-		/// <remarks>Items inside the Array can be null.</remarks>
-		public IReadOnlyList<Value> Array { get; internal set; }
+        /// <remarks>Items inside the Array can be null.</remarks>
+        public IReadOnlyList<Value> Array { get; internal set; }
 
         /// <summary>
         /// Gets the array type.
@@ -41,11 +41,11 @@
         /// <value>The type.</value>
         public ValueType Type { get; internal set; }
 
-		/// <summary>
-		/// Gets a value indicating whether this is a method argument.
-		/// </summary>
-		/// <value><c>true</c> if this is a method argument; otherwise, <c>false</c>.</value>
-		public bool IsMethodArgument { get; internal set; }
+        /// <summary>
+        /// Gets a value indicating whether this is a method argument.
+        /// </summary>
+        /// <value><c>true</c> if this is a method argument; otherwise, <c>false</c>.</value>
+        public bool IsMethodArgument { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether the value has changed.
@@ -53,23 +53,23 @@
         /// <value><c>true</c> if the value has changed; otherwise, <c>false</c>.</value>
         public bool HasNotChanged { get; internal set; }
 
-		/// <summary>
-		/// Gets a value indicating whether this has a static value.
-		/// </summary>
-		/// <value><c>true</c> if this has a static value; otherwise, <c>false</c>.</value>
-		public bool HasStaticValue => HasNotChanged && !IsMethodArgument;
+        /// <summary>
+        /// Gets a value indicating whether this has a static value.
+        /// </summary>
+        /// <value><c>true</c> if this has a static value; otherwise, <c>false</c>.</value>
+        public bool HasStaticValue => HasNotChanged && !IsMethodArgument;
 
         /// <summary>
         /// Converts the object value to an integer or <see langword="null"/> if the value does not represent an integer value.
         /// </summary>
         public int AsInt32 => Int32.TryParse(Convert.ToString(Object), out int r) ? r : default;
 
-		/// <summary>
-		/// Gets a value indicating whether this is a numeric value.
-		/// </summary>
-		/// <value><c>true</c> if this is a numeric value; otherwise, <c>false</c>.</value>
-		public bool IsNumeric()
-        {            
+        /// <summary>
+        /// Gets a value indicating whether this is a numeric value.
+        /// </summary>
+        /// <value><c>true</c> if this is a numeric value; otherwise, <c>false</c>.</value>
+        public bool IsNumeric()
+        {
             bool integers = Type == ValueType.Int8 || Type == ValueType.Int16 || Type == ValueType.Int32 || Type == ValueType.Int64;
             bool unsignedIntegers = Type == ValueType.UInt8 || Type == ValueType.UInt16 || Type == ValueType.UInt32 || Type == ValueType.UInt64;
             bool others = Type == ValueType.Single || Type == ValueType.Double || Type == ValueType.Decimal;

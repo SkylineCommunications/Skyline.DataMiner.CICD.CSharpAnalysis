@@ -1,9 +1,11 @@
 ﻿namespace Skyline.DataMiner.CICD.CSharpAnalysis
 {
     using System;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
+
     using Skyline.DataMiner.CICD.CSharpAnalysis.Classes;
 
     /// <summary>
@@ -40,11 +42,11 @@
             }
         }
 
-		/// <summary>
-		/// Visits the assignment expression node.
-		/// </summary>
-		/// <param name="node">The assignment expression node.</param>
-		public override void VisitAssignmentExpression(AssignmentExpressionSyntax node)
+        /// <summary>
+        /// Visits the assignment expression node.
+        /// </summary>
+        /// <param name="node">The assignment expression node.</param>
+        public override void VisitAssignmentExpression(AssignmentExpressionSyntax node)
         {
             AssignmentExpressionClass assignmentExpression = AssignmentExpressionClass.Parse(node);
 
@@ -53,11 +55,11 @@
             base.VisitAssignmentExpression(node);
         }
 
-		/// <summary>
-		/// Visits the trivia.
-		/// </summary>
-		/// <param name="node">The trivia.</param>
-		public override void VisitTrivia(SyntaxTrivia trivia)
+        /// <summary>
+        /// Visits the trivia.
+        /// </summary>
+        /// <param name="node">The trivia.</param>
+        public override void VisitTrivia(SyntaxTrivia trivia)
         {
             switch (trivia.Kind())
             {
@@ -82,11 +84,11 @@
             base.VisitTrivia(trivia);
         }
 
-		/// <summary>
-		/// Visits the #if preprocessor directive.
-		/// </summary>
-		/// <param name="node">The #if preprocessor directive.</param>
-		public override void VisitIfDirectiveTrivia(IfDirectiveTriviaSyntax node)
+        /// <summary>
+        /// Visits the #if preprocessor directive.
+        /// </summary>
+        /// <param name="node">The #if preprocessor directive.</param>
+        public override void VisitIfDirectiveTrivia(IfDirectiveTriviaSyntax node)
         {
             if (node.Condition is IdentifierNameSyntax ins)
             {
@@ -96,21 +98,21 @@
             base.VisitIfDirectiveTrivia(node);
         }
 
-		/// <summary>
-		/// Visits the #define preprocessor directive.
-		/// </summary>
-		/// <param name="node">The #define preprocessor directive.</param>
-		public override void VisitDefineDirectiveTrivia(DefineDirectiveTriviaSyntax node)
+        /// <summary>
+        /// Visits the #define preprocessor directive.
+        /// </summary>
+        /// <param name="node">The #define preprocessor directive.</param>
+        public override void VisitDefineDirectiveTrivia(DefineDirectiveTriviaSyntax node)
         {
             analyzer.CheckDefineDirective(node.Name.Text, node);
             base.VisitDefineDirectiveTrivia(node);
         }
 
-		/// <summary>
-		/// Visits the interface declaration syntax node.
-		/// </summary>
-		/// <param name="node">The interface declaration syntax node.</param>
-		public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
+        /// <summary>
+        /// Visits the interface declaration syntax node.
+        /// </summary>
+        /// <param name="node">The interface declaration syntax node.</param>
+        public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
         {
             InterfaceClass @interface = InterfaceClass.Parse(node);
 
@@ -118,11 +120,11 @@
             base.VisitInterfaceDeclaration(node);
         }
 
-		/// <summary>
-		/// Visits the class declaration node.
-		/// </summary>
-		/// <param name="node">The class declaration node.</param>
-		public override void VisitClassDeclaration(ClassDeclarationSyntax node)
+        /// <summary>
+        /// Visits the class declaration node.
+        /// </summary>
+        /// <param name="node">The class declaration node.</param>
+        public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
             ClassClass @class = ClassClass.Parse(node);
 
@@ -131,11 +133,11 @@
             base.VisitClassDeclaration(node);
         }
 
-		/// <summary>
-		/// Visits the method declaration node.
-		/// </summary>
-		/// <param name="node">The method declaration node.</param>
-		public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
+        /// <summary>
+        /// Visits the method declaration node.
+        /// </summary>
+        /// <param name="node">The method declaration node.</param>
+        public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
             MethodClass method = MethodClass.Parse(node);
 
@@ -144,11 +146,11 @@
             base.VisitMethodDeclaration(node);
         }
 
-		/// <summary>
-		/// Visits the invocation expression node.
-		/// </summary>
-		/// <param name="node">The invocation expression node.</param>
-		public override void VisitInvocationExpression(InvocationExpressionSyntax node)
+        /// <summary>
+        /// Visits the invocation expression node.
+        /// </summary>
+        /// <param name="node">The invocation expression node.</param>
+        public override void VisitInvocationExpression(InvocationExpressionSyntax node)
         {
             CallingMethodClass callingMethod = CallingMethodClass.Parse(node);
 
@@ -157,11 +159,11 @@
             base.VisitInvocationExpression(node);
         }
 
-		/// <summary>
-		/// Visits the constructor declaration node.
-		/// </summary>
-		/// <param name="node">The constructor declaration node.</param>
-		public override void VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
+        /// <summary>
+        /// Visits the constructor declaration node.
+        /// </summary>
+        /// <param name="node">The constructor declaration node.</param>
+        public override void VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
         {
             ConstructorClass ctor = ConstructorClass.Parse(node);
 
@@ -169,11 +171,11 @@
             base.VisitConstructorDeclaration(node);
         }
 
-		/// <summary>
-		/// Visits the object creation expression node.
-		/// </summary>
-		/// <param name="node">The object creation expression node.</param>
-		public override void VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
+        /// <summary>
+        /// Visits the object creation expression node.
+        /// </summary>
+        /// <param name="node">The object creation expression node.</param>
+        public override void VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
         {
             ObjectCreationClass occ = ObjectCreationClass.Parse(node);
 

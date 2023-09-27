@@ -4,7 +4,6 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-    
     /// <summary>
     /// Represents a parameter/argument.
     /// </summary>
@@ -14,23 +13,23 @@
         {
         }
 
-		/// <summary>
-		/// Gets a value indicating whether this is an out parameter.
-		/// </summary>
-		/// <value><c>true</c> if this is an out parameter;otherwise, <c>false</c>.</value>
-		public bool IsOut { get; private set; }
+        /// <summary>
+        /// Gets a value indicating whether this is an out parameter.
+        /// </summary>
+        /// <value><c>true</c> if this is an out parameter;otherwise, <c>false</c>.</value>
+        public bool IsOut { get; private set; }
 
-		/// <summary>
-		/// Gets a value indicating whether this is a ref parameter.
-		/// </summary>
-		/// <value><c>true</c> if this is a ref parameter;otherwise, <c>false</c>.</value>
-		public bool IsRef { get; private set; }
+        /// <summary>
+        /// Gets a value indicating whether this is a ref parameter.
+        /// </summary>
+        /// <value><c>true</c> if this is a ref parameter;otherwise, <c>false</c>.</value>
+        public bool IsRef { get; private set; }
 
-		/// <summary>
-		/// Gets a value indicating whether this is a params parameter.
-		/// </summary>
-		/// <value><c>true</c> if this is a params parameter;otherwise, <c>false</c>.</value>
-		public bool IsParams { get; private set; }
+        /// <summary>
+        /// Gets a value indicating whether this is a params parameter.
+        /// </summary>
+        /// <value><c>true</c> if this is a params parameter;otherwise, <c>false</c>.</value>
+        public bool IsParams { get; private set; }
 
         /// <summary>
         /// Gets the name.

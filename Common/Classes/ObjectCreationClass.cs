@@ -1,6 +1,7 @@
 ﻿namespace Skyline.DataMiner.CICD.CSharpAnalysis.Classes
 {
     using System.Collections.Generic;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
