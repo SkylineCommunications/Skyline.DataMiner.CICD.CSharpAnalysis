@@ -15,7 +15,9 @@
     public class CheckInterfaceTests
     {
         [TestMethod]
+#pragma warning disable S2699
         public void CheckInterfaceStuff()
+#pragma warning restore S2699
         {
             InterfaceAnalyzer analyzer = new InterfaceAnalyzer();
             RoslynVisitor parser = new RoslynVisitor(analyzer);
