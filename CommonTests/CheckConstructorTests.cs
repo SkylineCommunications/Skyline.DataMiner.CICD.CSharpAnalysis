@@ -13,7 +13,9 @@
     public class CheckConstructorTests
     {
         [TestMethod]
+#pragma warning disable S2699
         public void CheckConstructorStuff()
+#pragma warning restore S2699
         {
             ConstructorAnalyzer analyzer = new ConstructorAnalyzer();
             RoslynVisitor parser = new RoslynVisitor(analyzer);

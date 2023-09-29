@@ -115,7 +115,7 @@
         /// <summary>
         /// Retrieves the syntax kind of the specified value type.
         /// </summary>
-        /// <param name="kind">The value type.</param>
+        /// <param name="valueType">The value type.</param>
         /// <returns>The syntax kind.</returns>
         public static SyntaxKind GetSyntaxKind(Value.ValueType valueType)
         {
@@ -143,7 +143,7 @@
         /// <summary>
         /// Retrieves the value type of the specified special type.
         /// </summary>
-        /// <param name="kind">The special type.</param>
+        /// <param name="specialType">The special type.</param>
         /// <returns>The value type.</returns>
         public static Value.ValueType GetValueType(SpecialType specialType)
         {

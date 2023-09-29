@@ -58,7 +58,7 @@
         /// <summary>
         /// Visits the trivia.
         /// </summary>
-        /// <param name="node">The trivia.</param>
+        /// <param name="trivia">The trivia.</param>
         public override void VisitTrivia(SyntaxTrivia trivia)
         {
             switch (trivia.Kind())

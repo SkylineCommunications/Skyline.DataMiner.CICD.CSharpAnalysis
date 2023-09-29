@@ -84,7 +84,7 @@
         /// <summary>
         /// Checks the specified constructor.
         /// </summary>
-        /// <param name="method">The constructor.</param>
+        /// <param name="constructor">The constructor.</param>
         public virtual void CheckConstructor(ConstructorClass constructor) { }
     }
 }

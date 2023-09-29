@@ -10,7 +10,9 @@
     public class CSharpAnalyzerTests
     {
         [TestMethod()]
+#pragma warning disable S2699
         public void CheckCommentLineTest()
+#pragma warning restore S2699
         {
             CommentAnalyzer analyzer = new CommentAnalyzer();
             RoslynVisitor parser = new RoslynVisitor(analyzer);

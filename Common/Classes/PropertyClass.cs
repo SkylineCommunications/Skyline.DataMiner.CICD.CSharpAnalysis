@@ -70,6 +70,11 @@
         /// <value><c>true</c> if this is a static property; otherwise, <c>false</c>.</value>
         public bool IsStatic { get; internal set; }
 
+        /// <summary>
+        /// Parses the specified property declaration syntax node.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <returns>The <see cref="PropertyClass"/> instance.</returns>
         public static PropertyClass Parse(PropertyDeclarationSyntax node)
         {
             var prop = new PropertyClass(node)

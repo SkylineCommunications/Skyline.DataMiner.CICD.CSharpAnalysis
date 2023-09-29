@@ -472,9 +472,7 @@ public abstract partial class Class7
 
         private class QActionAnalyzer : CSharpAnalyzerBase
         {
-            private readonly SemanticModel semanticModel;
             private readonly Action<ClassClass> check;
-            private readonly Solution solution;
 
             public QActionAnalyzer(Action<ClassClass> check)
             {

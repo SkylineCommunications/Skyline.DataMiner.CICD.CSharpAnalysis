@@ -19,6 +19,11 @@
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CSharpObject{T}"/> class.
+        /// </summary>
+        /// <param name="syntaxNode">The syntax node.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="syntaxNode"/> is <see langword="null"/>.</exception>
         protected CSharpObject(T syntaxNode)
         {
             SyntaxNode = syntaxNode ?? throw new ArgumentNullException(nameof(syntaxNode));

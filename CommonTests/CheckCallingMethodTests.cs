@@ -6,8 +6,6 @@
     using FluentAssertions;
 
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Skyline.DataMiner.CICD.CSharpAnalysis;
@@ -497,26 +495,6 @@ namespace MyNamespace
                 return String.Empty;
             }
         }
-
-
-
-        private SemanticModel CreateSemanticModel(SyntaxTree syntaxTree)
-        {
-            var root = (CompilationUnitSyntax)syntaxTree.GetRoot();
-            var compilation = CSharpCompilation.Create("AssemblyName")
-                              .AddReferences(
-                                 MetadataReference.CreateFromFile(
-                                   @"C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.dll"))
-                              .AddSyntaxTrees(syntaxTree);
-
-            //compilation.
-
-            var model = compilation.GetSemanticModel(syntaxTree);
-
-            return model;
-        }
-
-        
 
         private class QActionAnalyzer : CSharpAnalyzerBase
         {

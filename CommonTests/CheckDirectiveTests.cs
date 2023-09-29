@@ -12,7 +12,9 @@
     public class CheckDirectiveTests
     {
         [TestMethod]
+#pragma warning disable S2699
         public void CheckDirectiveStuff()
+#pragma warning restore S2699
         {
             QActionAnalyzer analyzer = new QActionAnalyzer();
             RoslynVisitor parser = new RoslynVisitor(analyzer);
