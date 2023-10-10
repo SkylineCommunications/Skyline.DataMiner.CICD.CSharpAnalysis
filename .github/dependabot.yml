@@ -9,3 +9,11 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    groups:
+      microsoft-codeanalysis:
+        patterns:
+          - "Microsoft.CodeAnalysis.CSharp.*"
+      unit-test:
+        patterns:
+          - "MSTest.*"
+          - "Microsoft.NET.Test.Sdk"
