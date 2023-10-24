@@ -215,7 +215,7 @@ public static class QAction
                     method.Parameters[0].Type.Should().BeEquivalentTo("string");
                     method.Parameters[0].DefaultValue.Should().NotBeNull();
                     method.Parameters[0].DefaultValue.Object.Should().BeEquivalentTo("ABC");
-                    method.Parameters[0].DefaultValue.Type.Should().BeEquivalentTo(Value.ValueType.String);
+                    method.Parameters[0].DefaultValue.Type.Should().Be(Value.ValueType.String);
                 }
                 catch (AssertFailedException e)
                 {
@@ -267,7 +267,7 @@ public class QAction
                 try
                 {
                     method.Parameters.Should().BeEmpty();
-                    method.Access.Should().BeEquivalentTo(AccessModifier.Public);
+                    method.Access.Should().Be(AccessModifier.Public);
                     method.IsStatic.Should().BeTrue();
                     method.IsSealed.Should().BeFalse();
                     method.IsAbstract.Should().BeFalse();
@@ -294,7 +294,7 @@ public class QAction
                 try
                 {
                     method.Parameters.Should().HaveCount(3);
-                    method.Access.Should().BeEquivalentTo(AccessModifier.Protected | AccessModifier.Private);
+                    method.Access.Should().Be(AccessModifier.Protected | AccessModifier.Private);
                     method.IsStatic.Should().BeTrue();
                     method.IsSealed.Should().BeFalse();
                     method.IsAbstract.Should().BeFalse();

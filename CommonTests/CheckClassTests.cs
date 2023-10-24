@@ -85,7 +85,7 @@ public class Class3
 
                 try
                 {
-                    classClass.Access.Should().BeEquivalentTo(AccessModifier.Public);
+                    classClass.Access.Should().Be(AccessModifier.Public);
                 }
                 catch (AssertFailedException e)
                 {
@@ -104,7 +104,7 @@ public class Class3
 
                 try
                 {
-                    classClass.Access.Should().BeEquivalentTo(AccessModifier.Internal);
+                    classClass.Access.Should().Be(AccessModifier.Internal);
                 }
                 catch (AssertFailedException e)
                 {
@@ -123,7 +123,7 @@ public class Class3
 
                 try
                 {
-                    classClass.Access.Should().BeEquivalentTo(AccessModifier.Public);
+                    classClass.Access.Should().Be(AccessModifier.Public);
                     classClass.NestedClasses.Should().HaveCount(6);
 
                     results.Add(InnerClass1(classClass.NestedClasses[0]));
@@ -150,7 +150,7 @@ public class Class3
 
                 try
                 {
-                    classClass.Access.Should().BeEquivalentTo(AccessModifier.Public);
+                    classClass.Access.Should().Be(AccessModifier.Public);
                 }
                 catch (AssertFailedException e)
                 {
@@ -169,7 +169,7 @@ public class Class3
 
                 try
                 {
-                    classClass.Access.Should().BeEquivalentTo(AccessModifier.Internal);
+                    classClass.Access.Should().Be(AccessModifier.Internal);
                 }
                 catch (AssertFailedException e)
                 {
@@ -188,7 +188,7 @@ public class Class3
 
                 try
                 {
-                    classClass.Access.Should().BeEquivalentTo(AccessModifier.Protected);
+                    classClass.Access.Should().Be(AccessModifier.Protected);
                 }
                 catch (AssertFailedException e)
                 {
@@ -207,7 +207,7 @@ public class Class3
 
                 try
                 {
-                    classClass.Access.Should().BeEquivalentTo(AccessModifier.Private);
+                    classClass.Access.Should().Be(AccessModifier.Private);
                 }
                 catch (AssertFailedException e)
                 {
@@ -226,7 +226,7 @@ public class Class3
 
                 try
                 {
-                    classClass.Access.Should().BeEquivalentTo(AccessModifier.Protected | AccessModifier.Private);
+                    classClass.Access.Should().Be(AccessModifier.Protected | AccessModifier.Private);
                 }
                 catch (AssertFailedException e)
                 {
@@ -245,7 +245,7 @@ public class Class3
 
                 try
                 {
-                    classClass.Access.Should().BeEquivalentTo(AccessModifier.Protected | AccessModifier.Internal);
+                    classClass.Access.Should().Be(AccessModifier.Protected | AccessModifier.Internal);
                 }
                 catch (AssertFailedException e)
                 {

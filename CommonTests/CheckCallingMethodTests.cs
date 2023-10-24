@@ -176,7 +176,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(1);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.Int32);
+                    value.Type.Should().Be(Value.ValueType.Int32);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -198,7 +198,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(2);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.Int32);
+                    value.Type.Should().Be(Value.ValueType.Int32);
                     value.HasNotChanged.Should().BeFalse(); // Can't be guaranteed that it will be constant
                 }
                 catch (AssertFailedException e)
@@ -220,7 +220,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo((object)null);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.Null);
+                    value.Type.Should().Be(Value.ValueType.Null);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -242,7 +242,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo("ABC");
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.String);
+                    value.Type.Should().Be(Value.ValueType.String);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -264,7 +264,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(1);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.Int8);
+                    value.Type.Should().Be(Value.ValueType.Int8);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -286,7 +286,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(153);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.Int16);
+                    value.Type.Should().Be(Value.ValueType.Int16);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -308,7 +308,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(26654652);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.Int32);
+                    value.Type.Should().Be(Value.ValueType.Int32);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -330,7 +330,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(131351216813);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.Int64);
+                    value.Type.Should().Be(Value.ValueType.Int64);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -352,7 +352,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(1);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.UInt8);
+                    value.Type.Should().Be(Value.ValueType.UInt8);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -374,7 +374,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(153);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.UInt16);
+                    value.Type.Should().Be(Value.ValueType.UInt16);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -396,7 +396,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(26654652);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.UInt32);
+                    value.Type.Should().Be(Value.ValueType.UInt32);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -418,7 +418,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(131351216813);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.UInt64);
+                    value.Type.Should().Be(Value.ValueType.UInt64);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -440,7 +440,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(153.51);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.Double);
+                    value.Type.Should().Be(Value.ValueType.Double);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -462,7 +462,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(6);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.Int32);
+                    value.Type.Should().Be(Value.ValueType.Int32);
                     value.HasNotChanged.Should().BeTrue();
                 }
                 catch (AssertFailedException e)
@@ -484,7 +484,7 @@ namespace MyNamespace
                 {
                     callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
                     value.Object.Should().BeEquivalentTo(5);
-                    value.Type.Should().BeEquivalentTo(Value.ValueType.Int32);
+                    value.Type.Should().Be(Value.ValueType.Int32);
                     value.HasNotChanged.Should().BeFalse();
                 }
                 catch (AssertFailedException e)

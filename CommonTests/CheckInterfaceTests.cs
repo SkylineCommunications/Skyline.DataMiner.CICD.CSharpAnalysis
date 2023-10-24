@@ -45,7 +45,7 @@ namespace HelloWorld
         {
             public override void CheckInterface(InterfaceClass @interface)
             {
-                @interface.Access.Should().BeEquivalentTo(AccessModifier.Public);
+                @interface.Access.Should().Be(AccessModifier.Public);
                 @interface.Name.Should().BeEquivalentTo("Program");
                 @interface.Properties.Should().HaveCount(1);
                 @interface.Methods.Should().HaveCount(1);

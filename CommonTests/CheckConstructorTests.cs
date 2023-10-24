@@ -54,7 +54,7 @@ namespace HelloWorld
             public override void CheckConstructor(ConstructorClass constructor)
             {
                 constructor.Name.Should().BeEquivalentTo("Program");
-                constructor.Access.Should().BeEquivalentTo(AccessModifier.Public);
+                constructor.Access.Should().Be(AccessModifier.Public);
                 constructor.Parameters.Should().HaveCount(3);
 
                 //constructor.Parameters[0].GetType(semanticModel).Should().BeEquivalentTo(Value.ValueType.Int32);
