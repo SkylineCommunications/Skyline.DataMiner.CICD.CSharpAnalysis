@@ -843,11 +843,24 @@
                 case ObjectCreationExpressionSyntax oces:
                     // Examples: new DateTime(...); new MyClass();
 
+                    object o;
+                    try
+                    {
+                        // Will work when it's defined in the same project
+                        o = GetFullyQualifiedName(semanticModel, oces);
+                    }
+                    catch
+                    {
+                        // Backup for when it's defined in another project/semantic model
+                        // Will change the outcome as we can't retrieve the FQN.
+                        o = oces.ToFullString();
+                    }
+
                     value = new Value
                     {
                         Type = Value.ValueType.Unknown,
                         HasNotChanged = true,
-                        Object = oces.ToFullString(),
+                        Object = o,
                     };
                     succeeded = true;
                     break;
