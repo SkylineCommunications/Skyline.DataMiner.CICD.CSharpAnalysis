@@ -34,6 +34,8 @@ namespace MyOtherNamespace
             string programText = @"
 namespace MyNamespace
 {
+    using System;
+
     using MyOtherNamespace;
 	//using Skyline.DataMiner.Scripting;
 
@@ -122,6 +124,9 @@ namespace MyNamespace
 
             Method16(MyOtherConstants.TriggerQueue.Dequeue());
             Method17(MyOtherConstants.MyDoubleConst);
+
+            Method18(new DateTime(2008, 8, 29, 19, 27, 15));
+            Method19(MyOtherConstants.TriggerQueue);
 	    }
 
 	    private static void Method1(object o) { }
@@ -141,6 +146,8 @@ namespace MyNamespace
 	    private static void Method15(object o) { }
         private static void Method16(object o) { }
         private static void Method17(object o) { }
+        private static void Method18(object o) { }
+        private static void Method19(object o) { }
     }
 }";
 
@@ -191,6 +198,9 @@ namespace MyNamespace
                 // Using type from another project
                 results.Add(Method16(callingMethod, semanticModel, solution));
                 results.Add(Method17(callingMethod, semanticModel, solution));
+
+                results.Add(Method18(callingMethod, semanticModel, solution));
+                results.Add(Method19(callingMethod, semanticModel, solution));
             }
 
             string Method1(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
@@ -559,6 +569,48 @@ namespace MyNamespace
                 catch (AssertFailedException e)
                 {
                     return $"[Method17] {e.Message}";
+                }
+
+                return String.Empty;
+            }
+
+            string Method18(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            {
+                if (callingMethod.Name != "Method18")
+                {
+                    return null;
+                }
+
+                try
+                {
+                    callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
+                    value.Type.Should().Be(Value.ValueType.Unknown);
+                    value.Object.Should().BeEquivalentTo("System.DateTime");
+                }
+                catch (AssertFailedException e)
+                {
+                    return $"[Method18] {e.Message}";
+                }
+
+                return String.Empty;
+            }
+
+            string Method19(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            {
+                if (callingMethod.Name != "Method19")
+                {
+                    return null;
+                }
+
+                try
+                {
+                    callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
+                    value.Type.Should().Be(Value.ValueType.Unknown);
+                    value.Object.Should().BeEquivalentTo("new Queue<int>()");
+                }
+                catch (AssertFailedException e)
+                {
+                    return $"[Method19] {e.Message}";
                 }
 
                 return String.Empty;
