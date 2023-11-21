@@ -17,8 +17,6 @@
     using Skyline.DataMiner.CICD.CSharpAnalysis.Classes;
     using Skyline.DataMiner.CICD.CSharpAnalysis.Enums;
 
-    using SSkyline.DataMiner.CICD.CSharpAnalysis;
-
     /// <summary>
     /// Roslyn helper class.
     /// </summary>
@@ -458,7 +456,6 @@
             return false;
         }
 
-
         /// <summary>
         /// Tries parsing the specified expression as a value.
         /// </summary>
@@ -850,7 +847,7 @@
                     {
                         Type = Value.ValueType.Unknown,
                         HasNotChanged = true,
-                        Object = GetFullyQualifiedName(semanticModel, oces),
+                        Object = oces.ToFullString(),
                     };
                     succeeded = true;
                     break;
