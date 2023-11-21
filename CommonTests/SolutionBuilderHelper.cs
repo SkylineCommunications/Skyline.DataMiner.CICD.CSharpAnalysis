@@ -10,8 +10,10 @@
     {
         public static Solution CreateSolutionFromSource(string sourceCode)
         {
-            ICollection<MetadataReference> defaultReferences = new List<MetadataReference>();
-            defaultReferences.Add(MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location));
+            ICollection<MetadataReference> defaultReferences = new List<MetadataReference>
+            {
+                MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location)
+            };
 
             var adhocWorkspace = new AdhocWorkspace();
 
@@ -22,28 +24,73 @@
 
             adhocWorkspace.AddSolution(solutionInfo);
 
-            ProjectId projectId = ProjectId.CreateNewId();
+            string projectName = "Project_1";
+            ProjectId projectId = PrepareProject(versionStamp, defaultReferences, projectName, out ProjectInfo projectInfo);
+
+            AddProjectToSolution(adhocWorkspace, projectInfo);
+
+            AddCSharpFileToProject(sourceCode, adhocWorkspace, projectId);
+            return adhocWorkspace.CurrentSolution;
+        }
+
+        public static Solution CreateSolutionFromSource(string sourceCode, string precompile)
+        {
+            ICollection<MetadataReference> defaultReferences = new List<MetadataReference>
+            {
+                MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location)
+            };
+
+            var adhocWorkspace = new AdhocWorkspace();
+
+            VersionStamp versionStamp = VersionStamp.Create();
+
+            SolutionId solutionId = SolutionId.CreateNewId("solution");
+            SolutionInfo solutionInfo = SolutionInfo.Create(solutionId, versionStamp);
+
+            adhocWorkspace.AddSolution(solutionInfo);
 
             string projectName = "Project_1";
+            ProjectId projectId = PrepareProject(versionStamp, defaultReferences, projectName, out ProjectInfo projectInfo);
+
+            projectName = "Project_Precompile";
+            ProjectId precompileProjectId = PrepareProject(versionStamp, defaultReferences, projectName, out ProjectInfo precompileProjectInfo);
+
+            // Add link between project & precompile project
+            projectInfo = projectInfo.WithProjectReferences(new[] { new ProjectReference(precompileProjectId) });
+
+            AddProjectToSolution(adhocWorkspace, precompileProjectInfo);
+            AddProjectToSolution(adhocWorkspace, projectInfo);
+
+            AddCSharpFileToProject(precompile, adhocWorkspace, precompileProjectId);
+            AddCSharpFileToProject(sourceCode, adhocWorkspace, projectId);
+            return adhocWorkspace.CurrentSolution;
+        }
+
+        private static void AddCSharpFileToProject(string sourceCode, AdhocWorkspace adhocWorkspace, ProjectId projectId)
+        {
+            var sourceText = SourceText.From(sourceCode);
+            adhocWorkspace.AddDocument(projectId, "Class_1.cs", sourceText);
+            adhocWorkspace.TryApplyChanges(adhocWorkspace.CurrentSolution);
+        }
+
+        private static void AddProjectToSolution(AdhocWorkspace adhocWorkspace, ProjectInfo projectInfo)
+        {
+            var solution = adhocWorkspace.CurrentSolution.AddProject(projectInfo);
+            adhocWorkspace.TryApplyChanges(solution);
+        }
+
+        private static ProjectId PrepareProject(VersionStamp versionStamp, ICollection<MetadataReference> defaultReferences, string projectName, out ProjectInfo projectInfo)
+        {
+            ProjectId projectId = ProjectId.CreateNewId();
+
             CSharpParseOptions parseOptions = new CSharpParseOptions(LanguageVersion.CSharp7_3);
             CompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 
-            ProjectInfo projectInfo = ProjectInfo.Create(projectId, versionStamp, projectName, projectName, LanguageNames.CSharp)
-                .WithCompilationOptions(compilationOptions)
-                .WithParseOptions(parseOptions)
-                .WithMetadataReferences(defaultReferences);
-
-            var solution = adhocWorkspace.CurrentSolution;
-            solution = solution.AddProject(projectInfo);
-            bool result = adhocWorkspace.TryApplyChanges(solution);
-            solution = adhocWorkspace.CurrentSolution;
-
-            var sourceText = SourceText.From(sourceCode);
-            var doc = adhocWorkspace.AddDocument(projectId, "Class_1.cs", sourceText);
-            adhocWorkspace.TryApplyChanges(solution);
-            solution = adhocWorkspace.CurrentSolution;
-
-            return solution;
+            projectInfo = ProjectInfo.Create(projectId, versionStamp, projectName, projectName, LanguageNames.CSharp)
+                                     .WithCompilationOptions(compilationOptions)
+                                     .WithParseOptions(parseOptions)
+                                     .WithMetadataReferences(defaultReferences);
+            return projectId;
         }
 
         public static SemanticModel GetSemanticModel(Solution solution)
@@ -54,7 +101,7 @@
             return BuildProject(project);
         }
 
-        private static SemanticModel BuildProject(Project project)
+        public static SemanticModel BuildProject(Project project)
         {
             SemanticModel semanticModel = null;
 
@@ -72,7 +119,7 @@
                     }
                 }
 
-                if(compilationErrors.Count > 0)
+                if (compilationErrors.Count > 0)
                 {
                     throw new ArgumentException("Could not compile project: " + String.Join(Environment.NewLine, compilationErrors));
                 }

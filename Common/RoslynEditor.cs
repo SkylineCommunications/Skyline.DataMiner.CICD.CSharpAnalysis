@@ -1,4 +1,4 @@
-﻿namespace SSkyline.DataMiner.CICD.CSharpAnalysis
+﻿namespace Skyline.DataMiner.CICD.CSharpAnalysis
 {
     using System;
     using System.Collections.Generic;

@@ -19,9 +19,22 @@
         {
             List<string> results = new List<string>();
 
+            string precompileText = @"
+namespace MyOtherNamespace
+{
+    using System.Collections.Generic;
+    public static class MyOtherConstants
+    {
+        public static Queue<int> TriggerQueue = new Queue<int>();
+
+		public const double MyDoubleConst = 123.45;
+    }
+}";
+
             string programText = @"
 namespace MyNamespace
 {
+    using MyOtherNamespace;
 	//using Skyline.DataMiner.Scripting;
 
 	public static class MyConstants
@@ -106,6 +119,9 @@ namespace MyNamespace
 		    int d = 5;
 		    d++;
 		    Method15(d);
+
+            Method16(MyOtherConstants.TriggerQueue.Dequeue());
+            Method17(MyOtherConstants.MyDoubleConst);
 	    }
 
 	    private static void Method1(object o) { }
@@ -123,15 +139,23 @@ namespace MyNamespace
 	    private static void Method13(object o) { }
 	    private static void Method14(object o) { }
 	    private static void Method15(object o) { }
+        private static void Method16(object o) { }
+        private static void Method17(object o) { }
     }
 }";
 
-            var solution = SolutionBuilderHelper.CreateSolutionFromSource(programText);
-            var semanticModel = SolutionBuilderHelper.GetSemanticModel(solution);
+            var solution = SolutionBuilderHelper.CreateSolutionFromSource(programText, precompileText);
 
-            QActionAnalyzer analyzer = new QActionAnalyzer(semanticModel, CheckCallingMethod, solution);
-            RoslynVisitor parser = new RoslynVisitor(analyzer);
-            parser.Visit(semanticModel.SyntaxTree.GetRoot());
+            foreach (Project project in solution.Projects)
+            {
+                var semanticModel = SolutionBuilderHelper.BuildProject(project);
+
+                QActionAnalyzer analyzer = new QActionAnalyzer(semanticModel, CheckCallingMethod, solution);
+                RoslynVisitor parser = new RoslynVisitor(analyzer);
+                parser.Visit(semanticModel.SyntaxTree.GetRoot());
+
+                results.RemoveAll(String.IsNullOrWhiteSpace);
+            }
 
             results.RemoveAll(String.IsNullOrWhiteSpace);
             if (results.Count > 0)
@@ -163,6 +187,10 @@ namespace MyNamespace
                 results.Add(Method14(callingMethod, semanticModel, solution));
 
                 results.Add(Method15(callingMethod, semanticModel, solution));
+
+                // Using type from another project
+                results.Add(Method16(callingMethod, semanticModel, solution));
+                results.Add(Method17(callingMethod, semanticModel, solution));
             }
 
             string Method1(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
@@ -490,6 +518,47 @@ namespace MyNamespace
                 catch (AssertFailedException e)
                 {
                     return $"[Method15] {e.Message}";
+                }
+
+                return String.Empty;
+            }
+
+            string Method16(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            {
+                if (callingMethod.Name != "Method16")
+                {
+                    return null;
+                }
+
+                try
+                {
+                    callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeFalse();
+                }
+                catch (AssertFailedException e)
+                {
+                    return $"[Method16] {e.Message}";
+                }
+
+                return String.Empty;
+            }
+
+            string Method17(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            {
+                if (callingMethod.Name != "Method17")
+                {
+                    return null;
+                }
+
+                try
+                {
+                    callingMethod.Arguments[0].TryParseToValue(semanticModel, solution, out Value value).Should().BeTrue();
+                    value.Object.Should().BeEquivalentTo(123.45);
+                    value.Type.Should().Be(Value.ValueType.Double);
+                    value.HasNotChanged.Should().BeTrue();
+                }
+                catch (AssertFailedException e)
+                {
+                    return $"[Method17] {e.Message}";
                 }
 
                 return String.Empty;
