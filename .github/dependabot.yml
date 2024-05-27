@@ -13,7 +13,6 @@ updates:
       microsoft-codeanalysis:
         patterns:
           - "Microsoft.CodeAnalysis.CSharp.*"
-      unit-test:
+      ms-test:
         patterns:
           - "MSTest.*"
-          - "Microsoft.NET.Test.Sdk"
