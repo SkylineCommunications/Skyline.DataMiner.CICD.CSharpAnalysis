@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Xml;
 
     using FluentAssertions;
 
@@ -20,7 +19,7 @@
         [TestMethod]
         public void CheckMethod_Parameters()
         {
-            List<string> results = new List<string>();
+            List<string?> results = new List<string?>();
 
             const string programText =
    @"
@@ -59,7 +58,7 @@ public static class QAction
                 results.Add(Method7(method));
             }
 
-            string Method1(MethodClass method)
+            string? Method1(MethodClass method)
             {
                 if (method.Name != "Method1")
                 {
@@ -78,7 +77,7 @@ public static class QAction
                 return String.Empty;
             }
 
-            string Method2(MethodClass method)
+            string? Method2(MethodClass method)
             {
                 if (method.Name != "Method2")
                 {
@@ -102,7 +101,7 @@ public static class QAction
                 return String.Empty;
             }
 
-            string Method3(MethodClass method)
+            string? Method3(MethodClass method)
             {
                 if (method.Name != "Method3")
                 {
@@ -126,7 +125,7 @@ public static class QAction
                 return String.Empty;
             }
 
-            string Method4(MethodClass method)
+            string? Method4(MethodClass method)
             {
                 if (method.Name != "Method4")
                 {
@@ -150,7 +149,7 @@ public static class QAction
                 return String.Empty;
             }
 
-            string Method5(MethodClass method)
+            string? Method5(MethodClass method)
             {
                 if (method.Name != "Method5")
                 {
@@ -174,7 +173,7 @@ public static class QAction
                 return String.Empty;
             }
 
-            string Method6(MethodClass method)
+            string? Method6(MethodClass method)
             {
                 if (method.Name != "Method6")
                 {
@@ -198,7 +197,7 @@ public static class QAction
                 return String.Empty;
             }
 
-            string Method7(MethodClass method)
+            string? Method7(MethodClass method)
             {
                 if (method.Name != "Method7")
                 {
@@ -229,7 +228,7 @@ public static class QAction
         [TestMethod]
         public void CheckMethod_GeneralInfo()
         {
-            List<string> results = new List<string>();
+            List<string?> results = new List<string?>();
 
             const string programText =
    @"
@@ -257,7 +256,7 @@ public class QAction
                 results.Add(Method2(method));
             }
 
-            string Method1(MethodClass method)
+            string? Method1(MethodClass method)
             {
                 if (method.Name != "Method1")
                 {
@@ -284,7 +283,7 @@ public class QAction
                 return String.Empty;
             }
 
-            string Method2(MethodClass method)
+            string? Method2(MethodClass method)
             {
                 if (method.Name != "Method2")
                 {

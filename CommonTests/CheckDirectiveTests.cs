@@ -55,7 +55,7 @@ namespace HelloWorld
             parser.Visit(tree.GetRoot());
         }
 
-        internal class QActionAnalyzer : CSharpAnalyzerBase
+        private class QActionAnalyzer : CSharpAnalyzerBase
         {
             public override void CheckDefineDirective(string directiveName, DefineDirectiveTriviaSyntax directive)
             {

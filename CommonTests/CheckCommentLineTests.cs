@@ -40,7 +40,7 @@ namespace HelloWorld
             parser.Visit(tree.GetRoot());
         }
 
-        internal class CommentAnalyzer : CSharpAnalyzerBase
+        private class CommentAnalyzer : CSharpAnalyzerBase
         {
             public override void CheckCommentLine(string commentLine, SyntaxTrivia syntaxTrivia)
             {

@@ -93,7 +93,7 @@
             return projectId;
         }
 
-        public static SemanticModel GetSemanticModel(Solution solution)
+        public static SemanticModel? GetSemanticModel(Solution solution)
         {
             var project = solution.Projects.First();
 
@@ -101,13 +101,17 @@
             return BuildProject(project);
         }
 
-        public static SemanticModel BuildProject(Project project)
+        public static SemanticModel? BuildProject(Project project)
         {
-            SemanticModel semanticModel = null;
+            SemanticModel? semanticModel = null;
 
             var lastTask = project.GetCompilationAsync().ContinueWith(compileTask =>
             {
                 var compilation = compileTask.Result;
+                if (compilation == null)
+                {
+                    return;
+                }
                 var diagnostics = compilation.GetDiagnostics();
 
                 List<Diagnostic> compilationErrors = new List<Diagnostic>();

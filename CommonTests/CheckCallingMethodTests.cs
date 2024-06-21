@@ -17,7 +17,7 @@
         [TestMethod]
         public void CheckCallingMethod_TryParseValue_ReferencedVariables()
         {
-            List<string> results = new List<string>();
+            List<string?> results = new List<string?>();
 
             string precompileText = @"
 namespace MyOtherNamespace
@@ -203,7 +203,7 @@ namespace MyNamespace
                 results.Add(Method19(callingMethod, semanticModel, solution));
             }
 
-            string Method1(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method1(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method1")
                 {
@@ -225,7 +225,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method2(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method2(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method2")
                 {
@@ -247,7 +247,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method3(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method3(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method3")
                 {
@@ -269,7 +269,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method4(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method4(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method4")
                 {
@@ -291,7 +291,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method5(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method5(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method5")
                 {
@@ -313,7 +313,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method6(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method6(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method6")
                 {
@@ -335,7 +335,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method7(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method7(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method7")
                 {
@@ -357,7 +357,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method8(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method8(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method8")
                 {
@@ -379,7 +379,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method9(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method9(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method9")
                 {
@@ -401,7 +401,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method10(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method10(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method10")
                 {
@@ -423,7 +423,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method11(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method11(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method11")
                 {
@@ -445,7 +445,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method12(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method12(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method12")
                 {
@@ -467,7 +467,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method13(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method13(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method13")
                 {
@@ -489,7 +489,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method14(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method14(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method14")
                 {
@@ -511,7 +511,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method15(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method15(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method15")
                 {
@@ -533,7 +533,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method16(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method16(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method16")
                 {
@@ -552,7 +552,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method17(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method17(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method17")
                 {
@@ -574,7 +574,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method18(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method18(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method18")
                 {
@@ -595,7 +595,7 @@ namespace MyNamespace
                 return String.Empty;
             }
 
-            string Method19(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
+            string? Method19(CallingMethodClass callingMethod, SemanticModel semanticModel, Solution solution)
             {
                 if (callingMethod.Name != "Method19")
                 {

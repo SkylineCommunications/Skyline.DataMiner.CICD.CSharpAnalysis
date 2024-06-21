@@ -49,7 +49,7 @@ namespace HelloWorld
             parser.Visit(tree.GetRoot());
         }
 
-        internal class ConstructorAnalyzer : CSharpAnalyzerBase
+        private class ConstructorAnalyzer : CSharpAnalyzerBase
         {
             public override void CheckConstructor(ConstructorClass constructor)
             {

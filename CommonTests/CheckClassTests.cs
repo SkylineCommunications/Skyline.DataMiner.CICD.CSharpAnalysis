@@ -19,7 +19,7 @@
         [TestMethod]
         public void CheckClass_AccessModifiers()
         {
-            List<string> results = new List<string>();
+            List<string?> results = new List<string?>();
 
             const string programText =
                    @"
@@ -76,7 +76,7 @@ public class Class3
                 results.Add(Class3(classClass));
             }
 
-            string Class1(ClassClass classClass)
+            string? Class1(ClassClass classClass)
             {
                 if (classClass.Name != "Class1")
                 {
@@ -95,7 +95,7 @@ public class Class3
                 return String.Empty;
             }
 
-            string Class2(ClassClass classClass)
+            string? Class2(ClassClass classClass)
             {
                 if (classClass.Name != "Class2")
                 {
@@ -114,7 +114,7 @@ public class Class3
                 return String.Empty;
             }
 
-            string Class3(ClassClass classClass)
+            string? Class3(ClassClass classClass)
             {
                 if (classClass.Name != "Class3")
                 {
@@ -141,7 +141,7 @@ public class Class3
                 return String.Empty;
             }
 
-            string InnerClass1(ClassClass classClass)
+            string? InnerClass1(ClassClass classClass)
             {
                 if (classClass.Name != "InnerClass1")
                 {
@@ -160,7 +160,7 @@ public class Class3
                 return String.Empty;
             }
 
-            string InnerClass2(ClassClass classClass)
+            string? InnerClass2(ClassClass classClass)
             {
                 if (classClass.Name != "InnerClass2")
                 {
@@ -179,7 +179,7 @@ public class Class3
                 return String.Empty;
             }
 
-            string InnerClass3(ClassClass classClass)
+            string? InnerClass3(ClassClass classClass)
             {
                 if (classClass.Name != "InnerClass3")
                 {
@@ -198,7 +198,7 @@ public class Class3
                 return String.Empty;
             }
 
-            string InnerClass4(ClassClass classClass)
+            string? InnerClass4(ClassClass classClass)
             {
                 if (classClass.Name != "InnerClass4")
                 {
@@ -217,7 +217,7 @@ public class Class3
                 return String.Empty;
             }
 
-            string InnerClass5(ClassClass classClass)
+            string? InnerClass5(ClassClass classClass)
             {
                 if (classClass.Name != "InnerClass5")
                 {
@@ -236,7 +236,7 @@ public class Class3
                 return String.Empty;
             }
 
-            string InnerClass6(ClassClass classClass)
+            string? InnerClass6(ClassClass classClass)
             {
                 if (classClass.Name != "InnerClass6")
                 {
@@ -259,7 +259,7 @@ public class Class3
         [TestMethod]
         public void CheckClass_Keywords()
         {
-            List<string> results = new List<string>();
+            List<string?> results = new List<string?>();
 
             const string programText =
                    @"
@@ -315,7 +315,7 @@ public abstract partial class Class7
                 results.Add(Class7(classClass));
             }
 
-            string Class1(ClassClass classClass)
+            string? Class1(ClassClass classClass)
             {
                 if (classClass.Name != "Class1")
                 {
@@ -337,7 +337,7 @@ public abstract partial class Class7
                 return String.Empty;
             }
 
-            string Class2(ClassClass classClass)
+            string? Class2(ClassClass classClass)
             {
                 if (classClass.Name != "Class2")
                 {
@@ -359,7 +359,7 @@ public abstract partial class Class7
                 return String.Empty;
             }
 
-            string Class3(ClassClass classClass)
+            string? Class3(ClassClass classClass)
             {
                 if (classClass.Name != "Class3")
                 {
@@ -381,7 +381,7 @@ public abstract partial class Class7
                 return String.Empty;
             }
 
-            string Class4(ClassClass classClass)
+            string? Class4(ClassClass classClass)
             {
                 if (classClass.Name != "Class4")
                 {
@@ -403,7 +403,7 @@ public abstract partial class Class7
                 return String.Empty;
             }
 
-            string Class5(ClassClass classClass)
+            string? Class5(ClassClass classClass)
             {
                 if (classClass.Name != "Class5")
                 {
@@ -425,7 +425,7 @@ public abstract partial class Class7
                 return String.Empty;
             }
 
-            string Class6(ClassClass classClass)
+            string? Class6(ClassClass classClass)
             {
                 if (classClass.Name != "Class6")
                 {
@@ -447,7 +447,7 @@ public abstract partial class Class7
                 return String.Empty;
             }
 
-            string Class7(ClassClass classClass)
+            string? Class7(ClassClass classClass)
             {
                 if (classClass.Name != "Class7")
                 {

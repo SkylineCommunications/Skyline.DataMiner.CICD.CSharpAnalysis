@@ -9,8 +9,7 @@
     using Skyline.DataMiner.CICD.CSharpAnalysis;
     using Skyline.DataMiner.CICD.CSharpAnalysis.Classes;
     using Skyline.DataMiner.CICD.CSharpAnalysis.Enums;
-
-
+    
     [TestClass]
     public class CheckInterfaceTests
     {
@@ -41,7 +40,7 @@ namespace HelloWorld
             parser.Visit(tree.GetRoot());
         }
 
-        internal class InterfaceAnalyzer : CSharpAnalyzerBase
+        private class InterfaceAnalyzer : CSharpAnalyzerBase
         {
             public override void CheckInterface(InterfaceClass @interface)
             {
