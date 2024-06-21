@@ -182,5 +182,17 @@
             analyzer.CheckObjectCreation(occ);
             base.VisitObjectCreationExpression(node);
         }
+
+        /// <summary>
+        /// Visits the destructor declaration node.
+        /// </summary>
+        /// <param name="node">The destructor declaration node.</param>
+        public override void VisitDestructorDeclaration(DestructorDeclarationSyntax node)
+        {
+            FinalizerClass fc = FinalizerClass.Parse(node);
+
+            analyzer.CheckFinalizer(fc);
+            base.VisitDestructorDeclaration(node);
+        }
     }
 }

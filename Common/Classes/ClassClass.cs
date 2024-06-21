@@ -103,6 +103,12 @@
         /// <value><c>true</c> if this is a partial class;otherwise, <c>false</c>.</value>
         public bool IsPartial { get; private set; }
 
+        /// <summary>
+        /// Gets the finalizer.
+        /// </summary>
+        /// <value>The <see cref="FinalizerClass"/> if a finalizer is present. Will be <see langword="null"/> when not present.</value>
+        public FinalizerClass Finalizer { get; private set; }
+
         internal static ClassClass Parse(ClassDeclarationSyntax node)
         {
             ClassClass @class = new ClassClass(node)
@@ -159,6 +165,9 @@
                         break;
                     case ConstructorDeclarationSyntax cods:
                         @class.Constructors.Add(ConstructorClass.Parse(cods));
+                        break;
+                    case DestructorDeclarationSyntax dds:
+                        @class.Finalizer = FinalizerClass.Parse(dds);
                         break;
                 }
             }
