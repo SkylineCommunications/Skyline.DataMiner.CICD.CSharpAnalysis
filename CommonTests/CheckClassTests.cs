@@ -472,7 +472,7 @@ public abstract partial class Class7
         [TestMethod]
         public void CheckClass_Finalizer()
         {
-            List<string> results = new List<string>();
+            List<string?> results = new List<string?>();
 
             const string programText =
                    @"
@@ -503,7 +503,7 @@ public class Class2
                 results.Add(Class2(classClass));
             }
 
-            string Class1(ClassClass classClass)
+            string? Class1(ClassClass classClass)
             {
                 if (classClass.Name != "Class1")
                 {
@@ -522,7 +522,7 @@ public class Class2
                 return String.Empty;
             }
 
-            string Class2(ClassClass classClass)
+            string? Class2(ClassClass classClass)
             {
                 if (classClass.Name != "Class2")
                 {
