@@ -86,5 +86,11 @@
         /// </summary>
         /// <param name="constructor">The constructor.</param>
         public virtual void CheckConstructor(ConstructorClass constructor) { }
+
+        /// <summary>
+        /// Checks the specified finalizer.
+        /// </summary>
+        /// <param name="finalizerClass">The finalizer.</param>
+        public virtual void CheckFinalizer(FinalizerClass finalizerClass) { }
     }
 }

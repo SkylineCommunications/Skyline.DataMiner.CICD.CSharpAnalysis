@@ -290,8 +290,7 @@ public sealed partial class Class6
 public abstract partial class Class7
 {
 }";
-
-
+            
             QActionAnalyzer analyzer = new QActionAnalyzer(CheckClass);
             RoslynVisitor parser = new RoslynVisitor(analyzer);
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(programText);
@@ -464,6 +463,80 @@ public abstract partial class Class7
                 catch (AssertFailedException e)
                 {
                     return $"[Class7] {e.Message}";
+                }
+
+                return String.Empty;
+            }
+        }
+
+        [TestMethod]
+        public void CheckClass_Finalizer()
+        {
+            List<string?> results = new List<string?>();
+
+            const string programText =
+                   @"
+public class Class1
+{
+}
+
+public class Class2
+{
+    ~Class2() { }
+}";
+
+            QActionAnalyzer analyzer = new QActionAnalyzer(CheckClass);
+            RoslynVisitor parser = new RoslynVisitor(analyzer);
+            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(programText);
+
+            parser.Visit(syntaxTree.GetRoot());
+
+            results.RemoveAll(String.IsNullOrWhiteSpace);
+            if (results.Count > 0)
+            {
+                throw new AssertFailedException(String.Join(Environment.NewLine, results));
+            }
+
+            void CheckClass(ClassClass classClass)
+            {
+                results.Add(Class1(classClass));
+                results.Add(Class2(classClass));
+            }
+
+            string? Class1(ClassClass classClass)
+            {
+                if (classClass.Name != "Class1")
+                {
+                    return null;
+                }
+
+                try
+                {
+                    classClass.Finalizer.Should().BeNull();
+                }
+                catch (AssertFailedException e)
+                {
+                    return $"[Class1] {e.Message}";
+                }
+
+                return String.Empty;
+            }
+
+            string? Class2(ClassClass classClass)
+            {
+                if (classClass.Name != "Class2")
+                {
+                    return null;
+                }
+
+                try
+                {
+                    classClass.Finalizer.Should().NotBeNull();
+                    classClass.Finalizer.Name.Should().Be("Class2");
+                }
+                catch (AssertFailedException e)
+                {
+                    return $"[Class2] {e.Message}";
                 }
 
                 return String.Empty;
