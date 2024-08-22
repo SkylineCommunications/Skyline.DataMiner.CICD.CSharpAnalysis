@@ -555,6 +555,7 @@ public class Class2
     [Class(""A"", ""B"", ""C"")]
     [PropertyName(MyPropertyName = ""MyName"")]
     [CustomEnum(CustomEnum.A)]
+	[Other(""A, the first letter"", ""B, the second letter"", c:""C, the third letter"")]
     public class Class1
     {
     }
@@ -569,6 +570,22 @@ public class Class2
     public class PropertyNameAttribute : Attribute
     {
 	    public string MyPropertyName { get; set; }
+    }
+
+    public class OtherAttribute : Attribute
+    {
+        public OtherAttribute(string a, string b = """", string c = """")
+        {
+            A = a;
+            B = b;
+            C = c;
+        }
+
+        internal string A { get; } = String.Empty;
+
+        internal string B { get; } = String.Empty;
+
+        internal string C { get; } = String.Empty;
     }
 
     public class CustomEnumAttribute : Attribute
@@ -618,7 +635,7 @@ public class Class2
 
                 try
                 {
-                    classClass.Attributes.Should().HaveCount(3);
+                    classClass.Attributes.Should().HaveCount(4);
 
                     Attribute classAttribute = classClass.Attributes.Single(attribute => attribute.Name == "Class");
                     classAttribute.Arguments.Should().NotBeNullOrEmpty();
@@ -653,6 +670,24 @@ public class Class2
                     v3.Should().NotBeNull();
                     v3.Type.Should().Be(Value.ValueType.Int32);
                     v3.AsInt32.Should().Be(1);
+
+                    Attribute otherAttribute = classClass.Attributes.Single(attribute => attribute.Name == "Other");
+                    otherAttribute.Arguments.Should().NotBeNullOrEmpty();
+                    otherAttribute.Arguments.Should().HaveCount(3);
+
+                    foreach (AttributeArgument attributeArgument in otherAttribute.Arguments)
+                    {
+                        bool tryParseToValue = attributeArgument.TryParseToValue(out Value value);
+                        tryParseToValue.Should().BeTrue();
+                        value.Should().NotBeNull();
+                        value.Type.Should().Be(Value.ValueType.String);
+                        value.AsString.Should().BeOneOf("A, the first letter", "B, the second letter", "C, the third letter");
+
+                        if (value.AsString == "C, the third letter")
+                        {
+                            attributeArgument.Name.Should().Be("c");
+                        }
+                    }
                 }
                 catch (AssertFailedException e)
                 {

@@ -10,7 +10,9 @@
     {
         internal AttributeArgument(AttributeArgumentSyntax node) : base(node)
         {
-            Name = node?.NameEquals?.Name.Identifier.Text;
+            Name = node?.NameEquals?.Name.Identifier.Text ??
+                   node?.NameColon?.Name.Identifier.Text;
+
             RawValue = node?.Expression.ToFullString();
         }
 

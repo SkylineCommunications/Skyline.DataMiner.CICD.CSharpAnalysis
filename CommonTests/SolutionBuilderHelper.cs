@@ -12,7 +12,8 @@
         {
             ICollection<MetadataReference> defaultReferences = new List<MetadataReference>
             {
-                MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location)
+                MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(Queue<>).GetTypeInfo().Assembly.Location),
             };
 
             var adhocWorkspace = new AdhocWorkspace();
@@ -37,7 +38,8 @@
         {
             ICollection<MetadataReference> defaultReferences = new List<MetadataReference>
             {
-                MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location)
+                MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(Queue<>).GetTypeInfo().Assembly.Location),
             };
 
             var adhocWorkspace = new AdhocWorkspace();
