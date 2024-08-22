@@ -12,6 +12,7 @@
     using Skyline.DataMiner.CICD.CSharpAnalysis;
     using Skyline.DataMiner.CICD.CSharpAnalysis.Classes;
     using Skyline.DataMiner.CICD.CSharpAnalysis.Enums;
+    using Attribute = Skyline.DataMiner.CICD.CSharpAnalysis.Classes.Attribute;
 
     [TestClass]
     public class CheckClassTests
@@ -543,6 +544,125 @@ public class Class2
             }
         }
 
+        [TestMethod]
+        public void CheckClass_Attributes()
+        {
+            List<string?> results = new List<string?>();
+
+            const string programText =
+                   @"using System;
+
+    [Class(""A"", ""B"", ""C"")]
+    [PropertyName(MyPropertyName = ""MyName"")]
+    [CustomEnum(CustomEnum.A)]
+    public class Class1
+    {
+    }
+
+    public class ClassAttribute : Attribute
+    {
+	    public ClassAttribute(params string[] values)
+	    {
+	    }
+    }
+
+    public class PropertyNameAttribute : Attribute
+    {
+	    public string MyPropertyName { get; set; }
+    }
+
+    public class CustomEnumAttribute : Attribute
+    {
+	    public CustomEnumAttribute(CustomEnum customEnum)
+	    {
+	    }
+    }
+
+    public enum CustomEnum
+    {
+        Unknown,
+        A,
+        B, 
+        C
+    }";
+            var solution = SolutionBuilderHelper.CreateSolutionFromSource(programText);
+
+            foreach (Project project in solution.Projects)
+            {
+                var semanticModel = SolutionBuilderHelper.BuildProject(project);
+
+                var analyzer = new QActionAnalyzerWithSemanticModelAndSolution(semanticModel, CheckClass, solution);
+                RoslynVisitor parser = new RoslynVisitor(analyzer);
+                parser.Visit(semanticModel.SyntaxTree.GetRoot());
+
+                results.RemoveAll(String.IsNullOrWhiteSpace);
+            }
+
+            results.RemoveAll(String.IsNullOrWhiteSpace);
+            if (results.Count > 0)
+            {
+                throw new AssertFailedException(String.Join(Environment.NewLine, results));
+            }
+
+            void CheckClass(ClassClass classClass, SemanticModel semanticModel, Solution solution)
+            {
+                results.Add(Class1(classClass, semanticModel, solution));
+            }
+
+            string? Class1(ClassClass classClass, SemanticModel semanticModel, Solution solution)
+            {
+                if (classClass.Name != "Class1")
+                {
+                    return null;
+                }
+
+                try
+                {
+                    classClass.Attributes.Should().HaveCount(3);
+
+                    Attribute classAttribute = classClass.Attributes.Single(attribute => attribute.Name == "Class");
+                    classAttribute.Arguments.Should().NotBeNullOrEmpty();
+                    classAttribute.Arguments.Should().HaveCount(3);
+                    foreach (AttributeArgument attributeArgument in classAttribute.Arguments)
+                    {
+                        bool tryParseToValue = attributeArgument.TryParseToValue(out Value value);
+                        tryParseToValue.Should().BeTrue();
+                        value.Should().NotBeNull();
+                        value.Type.Should().Be(Value.ValueType.String);
+                        value.AsString.Should().BeOneOf("A", "B", "C");
+                    }
+
+                    Attribute propertyNameAttribute = classClass.Attributes.Single(attribute => attribute.Name == "PropertyName");
+                    propertyNameAttribute.Arguments.Should().NotBeNullOrEmpty();
+                    propertyNameAttribute.Arguments.Should().HaveCount(1);
+                    propertyNameAttribute.Arguments[0].Name.Should().BeEquivalentTo("MyPropertyName");
+                    propertyNameAttribute.Arguments[0].TryParseToValue(out Value v).Should().BeTrue();
+                    v.Should().NotBeNull();
+                    v.Type.Should().Be(Value.ValueType.String);
+                    v.AsString.Should().Be("MyName");
+
+                    Attribute customEnumAttribute = classClass.Attributes.Single(attribute => attribute.Name == "CustomEnum");
+                    customEnumAttribute.Arguments.Should().NotBeNullOrEmpty();
+                    customEnumAttribute.Arguments.Should().HaveCount(1);
+
+                    // No semantic model & solution
+                    customEnumAttribute.Arguments[0].TryParseToValue(out Value v2).Should().BeFalse();
+
+                    // With semantic model & solution
+                    customEnumAttribute.Arguments[0].TryParseToValue(semanticModel, solution, out Value v3).Should().BeTrue();
+                    v3.Should().NotBeNull();
+                    v3.Type.Should().Be(Value.ValueType.Int32);
+                    v3.AsInt32.Should().Be(1);
+                }
+                catch (AssertFailedException e)
+                {
+                    return $"[Class1] {e.Message}";
+                }
+
+                return String.Empty;
+            }
+        }
+
         private class QActionAnalyzer : CSharpAnalyzerBase
         {
             private readonly Action<ClassClass> check;
@@ -555,6 +675,25 @@ public class Class2
             public override void CheckClass(ClassClass classClass)
             {
                 check.Invoke(classClass);
+            }
+        }
+
+        private class QActionAnalyzerWithSemanticModelAndSolution : CSharpAnalyzerBase
+        {
+            private readonly SemanticModel semanticModel;
+            private readonly Action<ClassClass, SemanticModel, Solution> check;
+            private readonly Solution solution;
+
+            public QActionAnalyzerWithSemanticModelAndSolution(SemanticModel semanticModel, Action<ClassClass, SemanticModel, Solution> check, Solution solution)
+            {
+                this.semanticModel = semanticModel;
+                this.check = check;
+                this.solution = solution;
+            }
+
+            public override void CheckClass(ClassClass classClass)
+            {
+                check.Invoke(classClass, semanticModel, solution);
             }
         }
     }
