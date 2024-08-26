@@ -65,6 +65,11 @@
         public int AsInt32 => Int32.TryParse(Convert.ToString(Object), out int r) ? r : default;
 
         /// <summary>
+        /// Converts the object value to a string or <see langword="null"/> if the value does not represent a string value.
+        /// </summary>
+        public string AsString => Object as string;
+
+        /// <summary>
         /// Gets a value indicating whether this is a numeric value.
         /// </summary>
         /// <value><c>true</c> if this is a numeric value; otherwise, <c>false</c>.</value>
