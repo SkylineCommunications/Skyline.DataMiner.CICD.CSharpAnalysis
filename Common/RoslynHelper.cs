@@ -928,5 +928,29 @@
             ITypeSymbol symbol = semanticModel.GetTypeInfo(expression).Type;
             return symbol?.ToDisplayString(symbolDisplayFormat);
         }
+
+        /// <summary>
+        /// Gets the type symbol of the specified expression.
+        /// </summary>
+        /// <param name="semanticModel">The semantic model.</param>
+        /// <param name="expression">The expression.</param>
+        /// <returns>The type symbol.</returns>
+        public static ITypeSymbol GetTypeSymbol(SemanticModel semanticModel, ExpressionSyntax expression)
+        {
+            if (expression is MemberAccessExpressionSyntax maes)
+            {
+                ITypeSymbol argSymbol = semanticModel.GetTypeInfo(maes.Expression).Type;
+                return argSymbol;
+            }
+
+            if (expression is InvocationExpressionSyntax ies)
+            {
+                ITypeSymbol argSymbol = semanticModel.GetTypeInfo(ies.Expression).Type;
+                return argSymbol;
+            }
+
+            ITypeSymbol symbol = semanticModel.GetTypeInfo(expression).Type;
+            return symbol;
+        }
     }
 }

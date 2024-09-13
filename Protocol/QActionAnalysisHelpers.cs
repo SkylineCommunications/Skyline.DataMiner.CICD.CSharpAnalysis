@@ -131,6 +131,24 @@
         }
 
         /// <summary>
+        /// Determines whether the calling method is a method of a QActionTable subclass.
+        /// </summary>
+        /// <param name="callingMethod">The calling method.</param>
+        /// <param name="semanticModel">The semantic model.</param>
+        /// <returns><c>true</c> if the calling method is a method of a QActionTable subclass; otherwise, <c>false</c>.</returns>
+        public static bool IsProtocolExtTable(this CallingMethodClass callingMethod, SemanticModel semanticModel)
+        {
+            var typeSymbol = callingMethod.GetTypeSymbol(semanticModel);
+
+            if (typeSymbol?.BaseType != null && typeSymbol.BaseType.IsType && typeSymbol.BaseType.ToString().Equals("Skyline.DataMiner.Scripting.QActionTable", StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Checks if the parameter/argument of a method is the SLProtocol or SLProtocolExt interface.
         /// </summary>
         /// <param name="parameterClass">Parameter/argument of a method.</param>
