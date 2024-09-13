@@ -36,12 +36,22 @@
         public List<Argument> Arguments { get; }
 
         /// <summary>
-        /// Returns the Fully Qualified Name of the Parent. Or null in case it couldn't be resolved.
+        /// Returns the Fully Qualified Name of the Parent. Or null in case it could not be resolved.
         /// </summary>
         /// <param name="semanticModel">The semantic model.</param>
         public string GetFullyQualifiedNameOfParent(SemanticModel semanticModel)
         {
             return RoslynHelper.GetFullyQualifiedName(semanticModel, SyntaxNode.Expression);
+        }
+
+        /// <summary>
+        /// Returns the type symbol of the parent.
+        /// </summary>
+        /// <param name="semanticModel">The semantic model.</param>
+        /// <returns>The type symbol of the parent or <see langword="null"/> in case it could not be resolved.</returns>
+        public ITypeSymbol GetTypeSymbol(SemanticModel semanticModel)
+        {
+            return RoslynHelper.GetTypeSymbol(semanticModel, SyntaxNode.Expression);
         }
 
         /// <summary>
