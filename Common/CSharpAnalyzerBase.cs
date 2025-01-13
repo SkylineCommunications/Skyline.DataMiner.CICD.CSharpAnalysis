@@ -43,6 +43,18 @@
         public virtual void CheckMethod(MethodClass method) { }
 
         /// <summary>
+        /// Checks the specified property.
+        /// </summary>
+        /// <param name="property">The property.</param>
+        public virtual void CheckProperty(PropertyClass property) { }
+
+        /// <summary>
+        /// Checks the specified field.
+        /// </summary>
+        /// <param name="field">The field.</param>
+        public virtual void CheckField(FieldClass field) { }
+
+        /// <summary>
         /// Checks the specified class.
         /// </summary>
         /// <param name="classClass ">The class.</param>
