@@ -12,6 +12,7 @@
     using Skyline.DataMiner.CICD.CSharpAnalysis;
     using Skyline.DataMiner.CICD.CSharpAnalysis.Classes;
     using Skyline.DataMiner.CICD.CSharpAnalysis.Enums;
+
     using Attribute = Skyline.DataMiner.CICD.CSharpAnalysis.Classes.Attribute;
 
     [TestClass]
@@ -291,7 +292,7 @@ public sealed partial class Class6
 public abstract partial class Class7
 {
 }";
-            
+
             QActionAnalyzer analyzer = new QActionAnalyzer(CheckClass);
             RoslynVisitor parser = new RoslynVisitor(analyzer);
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(programText);
@@ -692,6 +693,133 @@ public class Class2
                 catch (AssertFailedException e)
                 {
                     return $"[Class1] {e.Message}";
+                }
+
+                return String.Empty;
+            }
+        }
+
+        [TestMethod]
+        public void CheckClass_Namespaces()
+        {
+            List<string?> results = new List<string?>();
+
+            const string programText =
+                   @"
+namespace MyNamespace
+{
+    public class Class1
+    {
+        public class InnerClass1
+        {
+        }
+    }
+
+    namespace MyInnerNamespace
+    {
+        public class Class3
+        {
+        }
+    }  
+}
+
+
+internal class Class2
+{
+}
+";
+            QActionAnalyzer analyzer = new QActionAnalyzer(CheckClass);
+            RoslynVisitor parser = new RoslynVisitor(analyzer);
+            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(programText);
+
+            parser.Visit(syntaxTree.GetRoot());
+
+            results.RemoveAll(String.IsNullOrWhiteSpace);
+            if (results.Count > 0)
+            {
+                throw new AssertFailedException(String.Join(Environment.NewLine, results));
+            }
+
+            void CheckClass(ClassClass classClass)
+            {
+                results.Add(Class1(classClass));
+                results.Add(Class2(classClass));
+                results.Add(Class3(classClass));
+            }
+
+            string? Class1(ClassClass classClass)
+            {
+                if (classClass.Name != "Class1")
+                {
+                    return null;
+                }
+
+                try
+                {
+                    classClass.Namespace.Should().Be("MyNamespace");
+
+                    results.Add(InnerClass1(classClass.NestedClasses[0]));
+                }
+                catch (AssertFailedException e)
+                {
+                    return $"[Class1] {e.Message}";
+                }
+
+                return String.Empty;
+            }
+
+            string? Class2(ClassClass classClass)
+            {
+                if (classClass.Name != "Class2")
+                {
+                    return null;
+                }
+
+                try
+                {
+                    classClass.Namespace.Should().Be(String.Empty);
+                }
+                catch (AssertFailedException e)
+                {
+                    return $"[Class2] {e.Message}";
+                }
+
+                return String.Empty;
+            }
+
+            string? Class3(ClassClass classClass)
+            {
+                if (classClass.Name != "Class3")
+                {
+                    return null;
+                }
+
+                try
+                {
+                    classClass.Namespace.Should().Be("MyNamespace.MyInnerNamespace");
+                }
+                catch (AssertFailedException e)
+                {
+                    return $"[Class3] {e.Message}";
+                }
+
+                return String.Empty;
+            }
+
+            string? InnerClass1(ClassClass classClass)
+            {
+                if (classClass.Name != "InnerClass1")
+                {
+                    return null;
+                }
+
+                try
+                {
+                    classClass.Namespace.Should().Be("MyNamespace");
+                }
+                catch (AssertFailedException e)
+                {
+                    return $"[Class1|InnerClass1] {e.Message}";
                 }
 
                 return String.Empty;

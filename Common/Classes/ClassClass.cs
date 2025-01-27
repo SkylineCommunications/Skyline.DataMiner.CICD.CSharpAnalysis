@@ -1,6 +1,9 @@
 ﻿namespace Skyline.DataMiner.CICD.CSharpAnalysis.Classes
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -24,6 +27,12 @@
             NestedClasses = new List<ClassClass>();
             Attributes = new List<Attribute>();
         }
+
+        /// <summary>
+        /// Gets the class namespace.
+        /// </summary>
+        /// <value>The class namespace.</value>
+        public string Namespace { get; private set; }
 
         /// <summary>
         /// Gets the class name.
@@ -113,6 +122,7 @@
         {
             ClassClass @class = new ClassClass(node)
             {
+                Namespace = String.Empty,
                 Name = node.Identifier.Text,
             };
             foreach (var item in node.Modifiers)
@@ -186,6 +196,12 @@
                 {
                     @class.Attributes.Add(Attribute.Parse(attribute));
                 }
+            }
+
+            var namespaceDeclarations = node.Ancestors().OfType<NamespaceDeclarationSyntax>();
+            if (namespaceDeclarations.Any())
+            {
+                @class.Namespace = String.Join(".", namespaceDeclarations.Reverse().Select(n => n.Name.ToString()));
             }
 
             return @class;

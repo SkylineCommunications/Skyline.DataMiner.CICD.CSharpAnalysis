@@ -55,6 +55,9 @@
                 case IdentifierNameSyntax ins:
                     type = ins.Identifier.Text;
                     return true;
+                case QualifiedNameSyntax qns:
+                    type = qns.ToString();
+                    return true;
                 default:
                     type = null;
                     return false;

@@ -1,5 +1,7 @@
 ﻿namespace Skyline.DataMiner.CICD.CSharpAnalysis.Classes
 {
+    using System.Collections.Generic;
+
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -13,6 +15,7 @@
         private FieldClass(FieldDeclarationSyntax node) : base(node)
         {
             Access = AccessModifier.None;
+            Attributes = new List<Attribute>();
         }
 
         /// <summary>
@@ -54,6 +57,12 @@
         /// </summary>
         /// <value><c>true</c> if this field has the new keyword;otherwise, <c>false</c>.</value>
         public bool IsNew { get; private set; }
+
+        /// <summary>
+        /// Gets the attributes of the field.
+        /// </summary>
+        /// <value>The attributes of the field.</value>
+        public List<Attribute> Attributes { get; }
 
         /// <summary>
         /// Parses the field declaration syntax node.
@@ -105,6 +114,14 @@
 
                     // EqualsValueClause
                     // TODO: retrieve the value
+                }
+            }
+
+            foreach (AttributeListSyntax attributeList in node.AttributeLists)
+            {
+                foreach (AttributeSyntax attribute in attributeList.Attributes)
+                {
+                    field.Attributes.Add(Attribute.Parse(attribute));
                 }
             }
 

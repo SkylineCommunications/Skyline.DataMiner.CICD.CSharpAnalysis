@@ -1,5 +1,7 @@
 ﻿namespace Skyline.DataMiner.CICD.CSharpAnalysis.Classes
 {
+    using System.Collections.Generic;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,6 +16,7 @@
         internal PropertyClass(PropertyDeclarationSyntax node) : base(node)
         {
             Access = AccessModifier.None;
+            Attributes = new List<Attribute>();
         }
 
         /// <summary>
@@ -69,6 +72,12 @@
         /// </summary>
         /// <value><c>true</c> if this is a static property; otherwise, <c>false</c>.</value>
         public bool IsStatic { get; internal set; }
+
+        /// <summary>
+        /// Gets the attributes of the property.
+        /// </summary>
+        /// <value>The attributes of the property.</value>
+        public List<Attribute> Attributes { get; }
 
         /// <summary>
         /// Parses the specified property declaration syntax node.
@@ -127,6 +136,14 @@
                         break;
 
                         // TODO: AccessModifier of the accessor isn't parsed yet
+                }
+            }
+
+            foreach (AttributeListSyntax attributeList in node.AttributeLists)
+            {
+                foreach (AttributeSyntax attribute in attributeList.Attributes)
+                {
+                    prop.Attributes.Add(Attribute.Parse(attribute));
                 }
             }
 

@@ -147,6 +147,33 @@
         }
 
         /// <summary>
+        /// Visits the field declaration node.
+        /// </summary>
+        /// <param name="node">The field declaration node.</param>
+        public override void VisitFieldDeclaration(FieldDeclarationSyntax node)
+        {
+            FieldClass field = FieldClass.Parse(node);
+
+            // Run method
+            analyzer.CheckField(field);
+            base.VisitFieldDeclaration(node);
+        }
+
+        /// <summary>
+        /// Visits the property declaration node.
+        /// </summary>
+        /// <param name="node">The property declaration node.</param>
+        public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
+        {
+            PropertyClass prop = PropertyClass.Parse(node);
+
+            // Run method
+            analyzer.CheckProperty(prop);
+            base.VisitPropertyDeclaration(node);
+        }
+
+
+        /// <summary>
         /// Visits the invocation expression node.
         /// </summary>
         /// <param name="node">The invocation expression node.</param>
