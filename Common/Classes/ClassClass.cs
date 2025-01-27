@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -197,12 +198,13 @@
                 }
             }
 
-            var namespaceDeclaration = node.Ancestors().OfType<NamespaceDeclarationSyntax>().FirstOrDefault();
-            if (namespaceDeclaration != null)
+            var namespaceDeclarations = node.Ancestors().OfType<NamespaceDeclarationSyntax>();
+            if (namespaceDeclarations.Any())
             {
-                // Return the namespace name
-                @class.Namespace = namespaceDeclaration.Name.ToString();
+                @class.Namespace = String.Join(".", namespaceDeclarations.Reverse().Select(n => n.Name.ToString()));
             }
+
+
 
             return @class;
         }

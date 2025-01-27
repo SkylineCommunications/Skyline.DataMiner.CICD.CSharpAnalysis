@@ -139,9 +139,9 @@
                 }
             }
 
-            foreach(AttributeListSyntax attributeList in node.AttributeLists)
+            foreach (AttributeListSyntax attributeList in node.AttributeLists)
             {
-                foreach(AttributeSyntax attribute in attributeList.Attributes)
+                foreach (AttributeSyntax attribute in attributeList.Attributes)
                 {
                     prop.Attributes.Add(Attribute.Parse(attribute));
                 }

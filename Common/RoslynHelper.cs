@@ -476,17 +476,17 @@
             switch (expression)
             {
                 case LiteralExpressionSyntax les:
+                {
+                    value = new Value
                     {
-                        value = new Value
-                        {
-                            Object = les.Token.Value,
-                            Type = ValueTypeConverter.GetValueType(les.Token),
-                            HasNotChanged = true,
-                        };
+                        Object = les.Token.Value,
+                        Type = ValueTypeConverter.GetValueType(les.Token),
+                        HasNotChanged = true,
+                    };
 
-                        succeeded = true;
-                        break;
-                    }
+                    succeeded = true;
+                    break;
+                }
             }
 
             return succeeded;
@@ -515,333 +515,333 @@
             switch (expression)
             {
                 case PrefixUnaryExpressionSyntax pues:
+                {
+                    // Examples:
+                    //// 1) int a = -1; (UnaryMinusExpression) (+ version: UnaryPlusExpression)
+                    //// 2) int b = ++a; (PreIncrementExpression)
+
+                    // Could be literal positive/negative value. (-1, +5)
+                    if (TryResolveExpression(pues, true, out Value v))
                     {
-                        // Examples:
-                        //// 1) int a = -1; (UnaryMinusExpression) (+ version: UnaryPlusExpression)
-                        //// 2) int b = ++a; (PreIncrementExpression)
-
-                        // Could be literal positive/negative value. (-1, +5)
-                        if (TryResolveExpression(pues, true, out Value v))
-                        {
-                            value = v;
-                            succeeded = true;
-                            break;
-                        }
-
-                        // Parse right side
-                        if (!TryParseValue(pues.Operand, semanticModel, solution, out Value valueOper))
-                        {
-                            // Unable to parse the right side
-                            break;
-                        }
-
-                        if (!valueOper.IsNumeric())
-                        {
-                            throw new NotImplementedException($"PrefixUnaryExpressionSyntax with '{valueOper.Type}' as ValueType for the Operand.");
-                        }
-
-                        if (pues.Kind() is SyntaxKind.PreIncrementExpression)
-                        {
-                            valueOper.Object = (dynamic)valueOper.Object + 1;
-                        }
-
-                        if (pues.Kind() is SyntaxKind.PreDecrementExpression)
-                        {
-                            valueOper.Object = (dynamic)valueOper.Object - 1;
-                        }
-
-                        value = valueOper;
-                        succeeded = true;
-                        break;
-                    }
-
-                case PostfixUnaryExpressionSyntax pues:
-                    {
-                        // Examples:
-                        //// 1) int b = a++; (PostIncrementExpression)
-
-                        // Parse left side
-                        if (!TryParseValue(pues.Operand, semanticModel, solution, out Value valueOper))
-                        {
-                            // Unable to parse the left side
-                            break;
-                        }
-
-                        if (!valueOper.IsNumeric())
-                        {
-                            throw new NotImplementedException($"PostfixUnaryExpressionSyntax with '{valueOper.Type}' as ValueType for the Operand.");
-                        }
-
-                        // TODO-MOD: Check if there are cases where we would want to have the calculated value... 
-                        ////if (pues.Kind() is SyntaxKind.PostIncrementExpression)
-                        ////{
-                        ////    valueOper.Object = (dynamic)valueOper.Object + 1;
-                        ////}
-
-                        ////if (pues.Kind() is SyntaxKind.PostDecrementExpression)
-                        ////{
-                        ////    valueOper.Object = (dynamic)valueOper.Object - 1;
-                        ////}
-
-                        value = valueOper;
-                        succeeded = true;
-                        break;
-                    }
-
-                case BinaryExpressionSyntax bes:
-                    {
-                        if (TryResolveExpression(expression, true, out Value v))
-                        {
-                            // In case of simple basic expressions.
-                            value = v;
-                            succeeded = true;
-                            break;
-                        }
-
-                        // When more BinaryExpressions are inside the 'main' expression, the recursive part will hopefully eventually be able to parse them.
-                        if (!TryParseValue(GetExpressionFromParenthesesOrDefault(bes.Left), semanticModel, solution, out Value valueLeft))
-                        {
-                            // Failed to parse the left side. No point in continuing.
-                            break;
-                        }
-
-                        if (!TryParseValue(GetExpressionFromParenthesesOrDefault(bes.Right), semanticModel, solution, out Value valueRight))
-                        {
-                            // Failed to parse the right side. No point in continuing.
-                            break;
-                        }
-
-                        ExpressionSyntax exprLeft = RoslynEditor.ResolveAsLiteral(valueLeft);
-                        ExpressionSyntax exprRight = RoslynEditor.ResolveAsLiteral(valueRight);
-
-                        if (exprLeft == null || exprRight == null)
-                        {
-                            // Couldn't resolve the value to a literal (Example: Method argument)
-                            break;
-                        }
-
-                        BinaryExpressionSyntax newExpression = SyntaxFactory.BinaryExpression(bes.Kind(), exprLeft, bes.OperatorToken, exprRight);
-
-                        bool hasNotChanged = valueLeft.HasNotChanged && valueRight.HasNotChanged;
-                        if (TryResolveExpression(newExpression, hasNotChanged, out Value finalValue))
-                        {
-                            // In case of simple basic expressions.
-                            value = finalValue;
-                            succeeded = true;
-                        }
-
-                        break;
-                    }
-
-                case CastExpressionSyntax ces:
-                    {
-                        if (!(ces.Type is PredefinedTypeSyntax pts))
-                        {
-                            // In case for casting to a class for example
-                            break;
-                        }
-
-                        if (!TryParseValue(ces.Expression, semanticModel, solution, out Value v))
-                        {
-                            // Unable to parse the right side. No point in going further.
-                            break;
-                        }
-
                         value = v;
                         succeeded = true;
-
-                        Value.ValueType kind = ValueTypeConverter.GetValueType(pts.Keyword.Kind());
-                        value.Type = kind;
-
-                        if (value.IsMethodArgument)
-                        {
-                            // No value to cast
-                            break;
-                        }
-
-                        // Rebuild cast expression to resolve it
-                        var literal = RoslynEditor.ResolveAsLiteral(value);
-                        if (literal == null)
-                        {
-                            // Value can't be casted.
-                            break;
-                        }
-
-                        var newCastExpression = SyntaxFactory.CastExpression(ces.Type, literal);
-
-                        if (TryResolveExpression(newCastExpression, value.HasNotChanged, out Value newValue))
-                        {
-                            value.Object = newValue.Object;
-                        }
-
                         break;
                     }
 
-                case IdentifierNameSyntax ins:
+                    // Parse right side
+                    if (!TryParseValue(pues.Operand, semanticModel, solution, out Value valueOper))
                     {
-                        if (TryGetVariableValue(ins, semanticModel, solution, out Value v))
-                        {
-                            value = v;
-                            succeeded = true;
-                        }
-
+                        // Unable to parse the right side
                         break;
                     }
 
-                case MemberAccessExpressionSyntax maes:
+                    if (!valueOper.IsNumeric())
                     {
-                        if (TryGetVariableValue(maes, semanticModel, solution, out Value v))
-                        {
-                            value = v;
-                            succeeded = true;
-                        }
+                        throw new NotImplementedException($"PrefixUnaryExpressionSyntax with '{valueOper.Type}' as ValueType for the Operand.");
+                    }
 
+                    if (pues.Kind() is SyntaxKind.PreIncrementExpression)
+                    {
+                        valueOper.Object = (dynamic)valueOper.Object + 1;
+                    }
+
+                    if (pues.Kind() is SyntaxKind.PreDecrementExpression)
+                    {
+                        valueOper.Object = (dynamic)valueOper.Object - 1;
+                    }
+
+                    value = valueOper;
+                    succeeded = true;
+                    break;
+                }
+
+                case PostfixUnaryExpressionSyntax pues:
+                {
+                    // Examples:
+                    //// 1) int b = a++; (PostIncrementExpression)
+
+                    // Parse left side
+                    if (!TryParseValue(pues.Operand, semanticModel, solution, out Value valueOper))
+                    {
+                        // Unable to parse the left side
                         break;
                     }
 
-                case ImplicitArrayCreationExpressionSyntax iaces:
+                    if (!valueOper.IsNumeric())
                     {
-                        if (TryParseValue(iaces.Initializer, semanticModel, solution, out Value v))
-                        {
-                            value = v;
-                            succeeded = true;
-                        }
-
-                        break;
+                        throw new NotImplementedException($"PostfixUnaryExpressionSyntax with '{valueOper.Type}' as ValueType for the Operand.");
                     }
 
-                case ArrayCreationExpressionSyntax aces:
+                    // TODO-MOD: Check if there are cases where we would want to have the calculated value... 
+                    ////if (pues.Kind() is SyntaxKind.PostIncrementExpression)
+                    ////{
+                    ////    valueOper.Object = (dynamic)valueOper.Object + 1;
+                    ////}
+
+                    ////if (pues.Kind() is SyntaxKind.PostDecrementExpression)
+                    ////{
+                    ////    valueOper.Object = (dynamic)valueOper.Object - 1;
+                    ////}
+
+                    value = valueOper;
+                    succeeded = true;
+                    break;
+                }
+
+                case BinaryExpressionSyntax bes:
+                {
+                    if (TryResolveExpression(expression, true, out Value v))
                     {
-                        if (TryParseValue(aces.Initializer, semanticModel, solution, out Value v))
-                        {
-                            value = v;
-                            succeeded = true;
-                        }
-
-                        break;
-                    }
-
-                case InitializerExpressionSyntax ies:
-                    {
-                        List<Value> internalValues = new List<Value>();
-                        foreach (var item in ies.Expressions)
-                        {
-                            if (TryParseValue(item, semanticModel, solution, out Value v))
-                            {
-                                internalValues.Add(v);
-                            }
-                            else
-                            {
-                                // Throw not supported exception?
-                                internalValues.Add(null);
-                            }
-                        }
-
-                        value = new Value
-                        {
-                            Type = Value.ValueType.Array,
-                            Array = internalValues,
-                            ArrayType = Value.ValueType.Unknown,
-                            HasNotChanged = true
-                        };
-
-                        try
-                        {
-                            if (ies.Parent != null && (ies.Parent is ArrayCreationExpressionSyntax || ies.Parent is ImplicitArrayCreationExpressionSyntax))
-                            {
-                                var parentType = semanticModel.GetTypeInfo(ies.Parent).Type;
-                                if (parentType is IArrayTypeSymbol ats)
-                                {
-                                    value.ArrayType = ValueTypeConverter.GetValueType(ats.ElementType.SpecialType);
-                                }
-                            }
-                            else
-                            {
-                                var parentType = semanticModel.GetTypeInfo(ies).ConvertedType;
-                                if (parentType is IArrayTypeSymbol ats)
-                                {
-                                    value.ArrayType = ValueTypeConverter.GetValueType(ats.ElementType.SpecialType);
-                                }
-                            }
-                        }
-                        catch (ArgumentException e)
-                            when (String.Equals(e.Message, "Syntax node is not within syntax tree", StringComparison.OrdinalIgnoreCase))
-                        {
-                            // Can't find it in this semantic model.
-                            // TODO: Check if other semantic model can be retrieved from solution? Probably extra load though...
-
-                            // Limited support for now.
-                            if (ies.Parent is ArrayCreationExpressionSyntax aes && aes.Type?.ElementType is PredefinedTypeSyntax pts)
-                            {
-                                value.ArrayType = ValueTypeConverter.GetValueType(pts.Keyword);
-                            }
-                        }
-
+                        // In case of simple basic expressions.
+                        value = v;
                         succeeded = true;
                         break;
                     }
 
-                case InvocationExpressionSyntax ies:
+                    // When more BinaryExpressions are inside the 'main' expression, the recursive part will hopefully eventually be able to parse them.
+                    if (!TryParseValue(GetExpressionFromParenthesesOrDefault(bes.Left), semanticModel, solution, out Value valueLeft))
                     {
-                        bool hasNotChanged = true;
-
-                        #region Resolve left part
-
-                        ExpressionSyntax newExpression = ies.Expression;
-                        if (ies.Expression is MemberAccessExpressionSyntax maes && TryParseValue(maes.Expression, semanticModel, solution, out Value expressionValue))
-                        {
-                            var temp = RoslynEditor.ResolveAsLiteral(expressionValue);
-
-                            if (temp == null)
-                            {
-                                // Couldn't figure out the left part
-                                return false;
-                            }
-
-                            newExpression = SyntaxFactory.MemberAccessExpression(maes.Kind(), temp, maes.OperatorToken, maes.Name);
-                            hasNotChanged = expressionValue.HasNotChanged;
-                        }
-
-                        #endregion
-
-                        #region Resolve arguments
-
-                        List<ArgumentSyntax> newArguments = new List<ArgumentSyntax>();
-                        foreach (var arg in ies.ArgumentList.Arguments)
-                        {
-                            if (!TryParseValue(arg.Expression, semanticModel, solution, out Value argValue))
-                            {
-                                // Argument couldn't be parsed. No point to continue.
-                                return false;
-                            }
-
-                            var newArg = RoslynEditor.ResolveAsArgument(argValue);
-
-                            if (newArg == null)
-                            {
-                                return false;
-                            }
-
-                            newArguments.Add(newArg);
-                            hasNotChanged = hasNotChanged && argValue.HasNotChanged;
-                        }
-
-                        SeparatedSyntaxList<ArgumentSyntax> separatedSyntaxList = new SeparatedSyntaxList<ArgumentSyntax>();
-                        separatedSyntaxList = separatedSyntaxList.AddRange(newArguments);
-                        var newArgumentList = SyntaxFactory.ArgumentList(separatedSyntaxList);
-
-                        #endregion
-
-                        var newInvocationExpression = SyntaxFactory.InvocationExpression(newExpression, newArgumentList);
-
-                        if (TryResolveExpression(newInvocationExpression, hasNotChanged, out Value newValue))
-                        {
-                            value = newValue;
-                            succeeded = true;
-                        }
-
+                        // Failed to parse the left side. No point in continuing.
                         break;
                     }
+
+                    if (!TryParseValue(GetExpressionFromParenthesesOrDefault(bes.Right), semanticModel, solution, out Value valueRight))
+                    {
+                        // Failed to parse the right side. No point in continuing.
+                        break;
+                    }
+
+                    ExpressionSyntax exprLeft = RoslynEditor.ResolveAsLiteral(valueLeft);
+                    ExpressionSyntax exprRight = RoslynEditor.ResolveAsLiteral(valueRight);
+
+                    if (exprLeft == null || exprRight == null)
+                    {
+                        // Couldn't resolve the value to a literal (Example: Method argument)
+                        break;
+                    }
+
+                    BinaryExpressionSyntax newExpression = SyntaxFactory.BinaryExpression(bes.Kind(), exprLeft, bes.OperatorToken, exprRight);
+
+                    bool hasNotChanged = valueLeft.HasNotChanged && valueRight.HasNotChanged;
+                    if (TryResolveExpression(newExpression, hasNotChanged, out Value finalValue))
+                    {
+                        // In case of simple basic expressions.
+                        value = finalValue;
+                        succeeded = true;
+                    }
+
+                    break;
+                }
+
+                case CastExpressionSyntax ces:
+                {
+                    if (!(ces.Type is PredefinedTypeSyntax pts))
+                    {
+                        // In case for casting to a class for example
+                        break;
+                    }
+
+                    if (!TryParseValue(ces.Expression, semanticModel, solution, out Value v))
+                    {
+                        // Unable to parse the right side. No point in going further.
+                        break;
+                    }
+
+                    value = v;
+                    succeeded = true;
+
+                    Value.ValueType kind = ValueTypeConverter.GetValueType(pts.Keyword.Kind());
+                    value.Type = kind;
+
+                    if (value.IsMethodArgument)
+                    {
+                        // No value to cast
+                        break;
+                    }
+
+                    // Rebuild cast expression to resolve it
+                    var literal = RoslynEditor.ResolveAsLiteral(value);
+                    if (literal == null)
+                    {
+                        // Value can't be casted.
+                        break;
+                    }
+
+                    var newCastExpression = SyntaxFactory.CastExpression(ces.Type, literal);
+
+                    if (TryResolveExpression(newCastExpression, value.HasNotChanged, out Value newValue))
+                    {
+                        value.Object = newValue.Object;
+                    }
+
+                    break;
+                }
+
+                case IdentifierNameSyntax ins:
+                {
+                    if (TryGetVariableValue(ins, semanticModel, solution, out Value v))
+                    {
+                        value = v;
+                        succeeded = true;
+                    }
+
+                    break;
+                }
+
+                case MemberAccessExpressionSyntax maes:
+                {
+                    if (TryGetVariableValue(maes, semanticModel, solution, out Value v))
+                    {
+                        value = v;
+                        succeeded = true;
+                    }
+
+                    break;
+                }
+
+                case ImplicitArrayCreationExpressionSyntax iaces:
+                {
+                    if (TryParseValue(iaces.Initializer, semanticModel, solution, out Value v))
+                    {
+                        value = v;
+                        succeeded = true;
+                    }
+
+                    break;
+                }
+
+                case ArrayCreationExpressionSyntax aces:
+                {
+                    if (TryParseValue(aces.Initializer, semanticModel, solution, out Value v))
+                    {
+                        value = v;
+                        succeeded = true;
+                    }
+
+                    break;
+                }
+
+                case InitializerExpressionSyntax ies:
+                {
+                    List<Value> internalValues = new List<Value>();
+                    foreach (var item in ies.Expressions)
+                    {
+                        if (TryParseValue(item, semanticModel, solution, out Value v))
+                        {
+                            internalValues.Add(v);
+                        }
+                        else
+                        {
+                            // Throw not supported exception?
+                            internalValues.Add(null);
+                        }
+                    }
+
+                    value = new Value
+                    {
+                        Type = Value.ValueType.Array,
+                        Array = internalValues,
+                        ArrayType = Value.ValueType.Unknown,
+                        HasNotChanged = true
+                    };
+
+                    try
+                    {
+                        if (ies.Parent != null && (ies.Parent is ArrayCreationExpressionSyntax || ies.Parent is ImplicitArrayCreationExpressionSyntax))
+                        {
+                            var parentType = semanticModel.GetTypeInfo(ies.Parent).Type;
+                            if (parentType is IArrayTypeSymbol ats)
+                            {
+                                value.ArrayType = ValueTypeConverter.GetValueType(ats.ElementType.SpecialType);
+                            }
+                        }
+                        else
+                        {
+                            var parentType = semanticModel.GetTypeInfo(ies).ConvertedType;
+                            if (parentType is IArrayTypeSymbol ats)
+                            {
+                                value.ArrayType = ValueTypeConverter.GetValueType(ats.ElementType.SpecialType);
+                            }
+                        }
+                    }
+                    catch (ArgumentException e)
+                        when (String.Equals(e.Message, "Syntax node is not within syntax tree", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Can't find it in this semantic model.
+                        // TODO: Check if other semantic model can be retrieved from solution? Probably extra load though...
+
+                        // Limited support for now.
+                        if (ies.Parent is ArrayCreationExpressionSyntax aes && aes.Type?.ElementType is PredefinedTypeSyntax pts)
+                        {
+                            value.ArrayType = ValueTypeConverter.GetValueType(pts.Keyword);
+                        }
+                    }
+
+                    succeeded = true;
+                    break;
+                }
+
+                case InvocationExpressionSyntax ies:
+                {
+                    bool hasNotChanged = true;
+
+                    #region Resolve left part
+
+                    ExpressionSyntax newExpression = ies.Expression;
+                    if (ies.Expression is MemberAccessExpressionSyntax maes && TryParseValue(maes.Expression, semanticModel, solution, out Value expressionValue))
+                    {
+                        var temp = RoslynEditor.ResolveAsLiteral(expressionValue);
+
+                        if (temp == null)
+                        {
+                            // Couldn't figure out the left part
+                            return false;
+                        }
+
+                        newExpression = SyntaxFactory.MemberAccessExpression(maes.Kind(), temp, maes.OperatorToken, maes.Name);
+                        hasNotChanged = expressionValue.HasNotChanged;
+                    }
+
+                    #endregion
+
+                    #region Resolve arguments
+
+                    List<ArgumentSyntax> newArguments = new List<ArgumentSyntax>();
+                    foreach (var arg in ies.ArgumentList.Arguments)
+                    {
+                        if (!TryParseValue(arg.Expression, semanticModel, solution, out Value argValue))
+                        {
+                            // Argument couldn't be parsed. No point to continue.
+                            return false;
+                        }
+
+                        var newArg = RoslynEditor.ResolveAsArgument(argValue);
+
+                        if (newArg == null)
+                        {
+                            return false;
+                        }
+
+                        newArguments.Add(newArg);
+                        hasNotChanged = hasNotChanged && argValue.HasNotChanged;
+                    }
+
+                    SeparatedSyntaxList<ArgumentSyntax> separatedSyntaxList = new SeparatedSyntaxList<ArgumentSyntax>();
+                    separatedSyntaxList = separatedSyntaxList.AddRange(newArguments);
+                    var newArgumentList = SyntaxFactory.ArgumentList(separatedSyntaxList);
+
+                    #endregion
+
+                    var newInvocationExpression = SyntaxFactory.InvocationExpression(newExpression, newArgumentList);
+
+                    if (TryResolveExpression(newInvocationExpression, hasNotChanged, out Value newValue))
+                    {
+                        value = newValue;
+                        succeeded = true;
+                    }
+
+                    break;
+                }
 
                 case ObjectCreationExpressionSyntax oces:
                     // Examples: new DateTime(...); new MyClass();
