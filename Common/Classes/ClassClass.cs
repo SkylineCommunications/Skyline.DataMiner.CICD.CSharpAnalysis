@@ -204,8 +204,6 @@
                 @class.Namespace = String.Join(".", namespaceDeclarations.Reverse().Select(n => n.Name.ToString()));
             }
 
-
-
             return @class;
         }
     }
