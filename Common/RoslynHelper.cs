@@ -775,8 +775,7 @@
                             {
                                 value.ArrayType = ValueTypeConverter.GetValueType(pts.Keyword);
                             }
-
-                            if (ies.Parent?.Parent?.Parent is VariableDeclarationSyntax vds && vds.Type is ArrayTypeSyntax ats &&
+                            else if (ies.Parent?.Parent?.Parent is VariableDeclarationSyntax vds && vds.Type is ArrayTypeSyntax ats &&
                                 ats.ElementType is PredefinedTypeSyntax pts2)
                             {
                                 value.ArrayType = ValueTypeConverter.GetValueType(pts2.Keyword);
