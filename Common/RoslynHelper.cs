@@ -237,10 +237,12 @@
             catch (ArgumentException e)
                 when (String.Equals(e.Message, "Syntax node is not within syntax tree", StringComparison.OrdinalIgnoreCase))
             {
-                // In case variable is defined in another QAction (Chained back to precompile (different semantic model)
-                // TODO: Maybe an idea to see if we can 'preload' the precompile and also supply that with the TryParseValue?
-                // In case of these exceptions, then we can search it in the precompile. 
-                return false;
+                // In case variable is defined in another QAction (Chained back to precompile (different semantic model))
+                // In case of these exceptions, then we can search it in the other projects. 
+                if (!TryGetSymbolInfoFromSolution(expression, solution, out symbol))
+                {
+                    return false;
+                }
             }
             catch (Exception)
             {
@@ -385,6 +387,40 @@
             }
 
             return false;
+        }
+
+        private static bool TryGetSymbolInfoFromSolution(ExpressionSyntax expression, Solution solution, out ISymbol symbol)
+        {
+            symbol = null;
+
+            try
+            {
+                foreach (Project project in solution.Projects)
+                {
+                    var tempComp = project.GetCompilationAsync().Result;
+                    if (tempComp == null || !tempComp.SyntaxTrees.Any())
+                    {
+                        continue;
+                    }
+
+                    var semModel = tempComp.GetSemanticModel(tempComp.SyntaxTrees.First());
+
+                    try
+                    {
+                        symbol = semModel.GetSymbolInfo(expression).Symbol;
+                    }
+                    catch
+                    {
+                        // Don't do anything
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return symbol != null;
         }
 
         /// <summary>
