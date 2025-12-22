@@ -16,7 +16,7 @@
     <PackageProjectUrl>https://skyline.be/</PackageProjectUrl>
     <PackageTags>Skyline;DataMiner;CICD</PackageTags>
     <Description>Library containing common functionality for C# code analysis of QActions using the .NET Compiler Platform APIs (Roslyn).</Description>
-    <RepositoryUrl>https://github.com/Skyline.DataMiner.CICD.CSharpAnalysis.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/SkylineCommunications/Skyline.DataMiner.CICD.CSharpAnalysis.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
