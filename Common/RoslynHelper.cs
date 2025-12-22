@@ -408,10 +408,12 @@
                     try
                     {
                         symbol = semModel.GetSymbolInfo(expression).Symbol;
+                        return true;
                     }
                     catch
                     {
-                        // Don't do anything
+                        // Don't do anything as it probably means the expression is not in this semantic model.
+                        // This is best-effort attempt.
                     }
                 }
             }
@@ -420,7 +422,7 @@
                 return false;
             }
 
-            return symbol != null;
+            return false;
         }
 
         /// <summary>
