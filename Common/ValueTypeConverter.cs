@@ -49,7 +49,15 @@
         /// <returns>The value type.</returns>
         public static Value.ValueType GetValueType(SyntaxToken token)
         {
-            return GetValueType(token.Value?.GetType());
+            var valueType = GetValueType(token.Kind());
+            if (valueType == Value.ValueType.Unknown)
+            {
+                // Try based on the actual value
+                // In certain cases, the type via the value is string even though it is an uint[]. But the kind is UintKeyword which is more accurate.
+                valueType = GetValueType(token.Value?.GetType());
+            }
+
+            return valueType;
         }
 
         /// <summary>
@@ -90,6 +98,7 @@
         {
             switch (kind)
             {
+                case SyntaxKind.StringLiteralToken: return Value.ValueType.String;
                 case SyntaxKind.StringKeyword: return Value.ValueType.String;
 
                 case SyntaxKind.SByteKeyword: return Value.ValueType.Int8;
