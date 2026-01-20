@@ -12,7 +12,7 @@ updates:
     groups:
       microsoft-codeanalysis:
         patterns:
-          - "Microsoft.CodeAnalysis.CSharp.*"
+          - "Microsoft.CodeAnalysis.*"
     ignore:
       - dependency-name: "FluentAssertions"
         versions: [ ">=8.0.0" ]
