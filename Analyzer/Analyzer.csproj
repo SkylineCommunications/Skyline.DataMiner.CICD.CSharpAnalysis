@@ -19,6 +19,10 @@
     <Company>Skyline Communications</Company>
     <Description>Skyline.DataMiner.CICD.CSharpAnalysis.Analyzer is a Roslyn analyzer package designed to help developers identify risky or error-prone C# coding patterns early in the development cycle.</Description>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <!-- Prevent DLL from going to /lib -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <!-- Generate the NuGet package on build -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
     <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
@@ -36,5 +40,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="$(OutputPath)$(AssemblyName).dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs" />
   </ItemGroup>
 </Project>
