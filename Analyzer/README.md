@@ -2,7 +2,26 @@
 
 ## About
 
+**Skyline.DataMiner.CICD.CSharpAnalysis.Analyzer** is a Roslyn analyzer package that identifies bad practices and reliability issues in C# codebases.  
+It integrates seamlessly into Visual Studio, VS Code (with Roslyn support), and CI pipelines to provide real‑time diagnostics that guide developers toward safer, more maintainable cod
 
+
+---
+
+## 📦 Installation
+
+Add the NuGet package to your project:
+
+```bash
+dotnet add package Skyline.DataMiner.CICD.CSharpAnalysis.Analyzer
+```
+
+Or via the Visual Studio NuGet Package Manager:
+```bash
+Skyline.DataMiner.CICD.CSharpAnalysis.Analyzer
+```
+
+Once installed, analyzers activate automatically — no additional configuration required.
 
 ### About DataMiner
 
