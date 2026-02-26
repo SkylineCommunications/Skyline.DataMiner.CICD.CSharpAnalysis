@@ -5,9 +5,7 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  </PropertyGroup>
-
-  <PropertyGroup>
+    
     <PackageId>Skyline.DataMiner.CICD.CSharpAnalysis.Analyzer</PackageId>
     <Authors>SkylineCommunications</Authors>
     <Company>Skyline Communications</Company>
