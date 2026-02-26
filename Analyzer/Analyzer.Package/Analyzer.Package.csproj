@@ -5,8 +5,9 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    
+
     <PackageId>Skyline.DataMiner.CICD.CSharpAnalysis.Analyzer</PackageId>
+    <AssemblyName>Skyline.DataMiner.CICD.CSharpAnalysis.Analyzer</AssemblyName>
     <Authors>SkylineCommunications</Authors>
     <Company>Skyline Communications</Company>
     <PackageProjectUrl>https://skyline.be</PackageProjectUrl>
@@ -14,7 +15,8 @@
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageIcon>Icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/SkylineCommunications/Skyline.DataMiner.CICD.CSharpAnalysis.git</RepositoryUrl>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>Skyline.DataMiner.CICD.CSharpAnalysis.Analyzer is a Roslyn analyzer package designed to help developers identify risky or error-prone C# coding patterns early in the development cycle.</Description>
     <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
     <Copyright>Copyright</Copyright>
