@@ -1,11 +1,10 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
-using Skyline.DataMiner.CICD.CSharpAnalysis.Analyzer;
-using Xunit;
-
-namespace AnalyzerTests
+﻿namespace Analyzer.Test
 {
-    using VerifyCS = CSharpAnalyzerVerifier<SystemThreadingTimerTryCatch, DefaultVerifier>;
+    using System.Threading.Tasks;
+
+    using Xunit;
+
+    using VerifyCS = Microsoft.CodeAnalysis.CSharp.Testing.CSharpAnalyzerVerifier<Skyline.DataMiner.CICD.CSharpAnalysis.Analyzer.SystemThreadingTimerTryCatch, Microsoft.CodeAnalysis.Testing.DefaultVerifier>;
 
     public class SystemThreadingTimerTryCatchTests
     {
