@@ -89,7 +89,7 @@
                     break;
 
                 case AnonymousMethodExpressionSyntax anon:
-                    CheckBlockForTry(context, anon.Block, expr.GetLocation());
+                    CheckBlockForTryCatch(context, anon.Block, expr.GetLocation());
                     break;
 
                 case IdentifierNameSyntax _:
@@ -106,7 +106,7 @@
             switch (lambda.Body)
             {
                 case BlockSyntax block:
-                    CheckBlockForTry(context, block, lambda.GetLocation());
+                    CheckBlockForTryCatch(context, block, lambda.GetLocation());
                     break;
 
                 case ExpressionSyntax _:
@@ -126,10 +126,10 @@
             if (decl?.Body == null)
                 return;
 
-            CheckBlockForTry(context, decl.Body, methodGroup.GetLocation());
+            CheckBlockForTryCatch(context, decl.Body, methodGroup.GetLocation());
         }
 
-        private static void CheckBlockForTry(
+        private static void CheckBlockForTryCatch(
             SyntaxNodeAnalysisContext context,
             BlockSyntax block,
             Location reportLocation)
@@ -140,9 +140,11 @@
                 return;
             }
 
-            var hasTry = block.DescendantNodes().OfType<TryStatementSyntax>().Any();
+            var hasTryCatch = block.DescendantNodes().OfType<TryStatementSyntax>()
+                .SelectMany(t => t.Catches)
+                .Any();
 
-            if (!hasTry)
+            if (!hasTryCatch)
             {
                 context.ReportDiagnostic(Diagnostic.Create(Rule, reportLocation));
             }
