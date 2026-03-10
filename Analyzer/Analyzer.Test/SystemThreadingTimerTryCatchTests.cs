@@ -30,6 +30,34 @@ class TestClass
         }
 
         [Fact]
+        public async Task LambdaWithoutCatch_ShouldReportDiagnostic()
+        {
+            var test = @"
+using System;
+using System.Threading;
+
+class TestClass
+{
+    void Test()
+    {
+        var t = new Timer({|#0:_ =>
+        {
+            try
+            {
+                Console.WriteLine(""Hello"");       
+            }
+            finally
+            {
+                //nop
+            }
+        }|});
+    }
+}";
+            var expected = VerifyCS.Diagnostic("TIMER001").WithLocation(0);
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
         public async Task LambdaWithTryCatch_ShouldNotReportDiagnostic()
         {
             var test = @"
@@ -70,6 +98,36 @@ class TestClass
     void Method(object state)
     {
         Console.WriteLine(""Hello""); // missing try/catch
+    }
+}";
+            var expected = VerifyCS.Diagnostic("TIMER001").WithLocation(0);
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
+        public async Task MethodCallbackWithoutCatch_ShouldReportDiagnostic()
+        {
+            var test = @"
+using System;
+using System.Threading;
+
+class TestClass
+{
+    void Test()
+    {
+        var t = new Timer({|#0:Method|});
+    }
+
+    void Method(object state)
+    {
+        try
+        {
+            Console.WriteLine(""Hello"");       
+        }
+        finally
+        {
+            //nop
+        }
     }
 }";
             var expected = VerifyCS.Diagnostic("TIMER001").WithLocation(0);
@@ -144,6 +202,34 @@ class TestClass
         }
 
         [Fact]
+        public async Task AnonymousMethodWithoutCatch_ShouldReportDiagnostic()
+        {
+            var test = @"
+using System;
+using System.Threading;
+
+class TestClass
+{
+    void Test()
+    {
+        var t = new Timer({|#0:delegate(object state)
+        {
+            try
+            {
+                Console.WriteLine(""Hello"");       
+            }
+            finally
+            {
+                //nop
+            }
+        }|});
+    }
+}";
+            var expected = VerifyCS.Diagnostic("TIMER001").WithLocation(0);
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
         public async Task AnonymousMethodWithTryCatch_ShouldNotReportDiagnostic()
         {
             var test = @"
@@ -193,6 +279,36 @@ class TestClass
         }
 
         [Fact]
+        public async Task MemberAccessMethodGroup_InstanceWithoutCatch_ShouldReportDiagnostic()
+        {
+            var test = @"
+using System;
+using System.Threading;
+
+class TestClass
+{
+    void Test()
+    {
+        var t = new Timer({|#0:this.Callback|});
+    }
+
+    void Callback(object state)
+    {
+        try
+        {
+            Console.WriteLine(""Hello"");       
+        }
+        finally
+        {
+            //nop
+        }
+    }
+}";
+            var expected = VerifyCS.Diagnostic("TIMER001").WithLocation(0);
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
         public async Task MemberAccessMethodGroup_StaticWithoutTryCatch_ShouldReportDiagnostic()
         {
             var test = @"
@@ -204,6 +320,39 @@ static class Helper
     public static void StaticCallback(object state)
     {
         Console.WriteLine(""Hello""); // missing try/catch
+    }
+}
+
+class TestClass
+{
+    void Test()
+    {
+        var t = new Timer({|#0:Helper.StaticCallback|});
+    }
+}";
+            var expected = VerifyCS.Diagnostic("TIMER001").WithLocation(0);
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
+        public async Task MemberAccessMethodGroup_StaticWithoutCatch_ShouldReportDiagnostic()
+        {
+            var test = @"
+using System;
+using System.Threading;
+
+static class Helper
+{
+    public static void StaticCallback(object state)
+    {
+        try
+        {
+            Console.WriteLine(""Hello"");       
+        }
+        finally
+        {
+            //nop
+        }
     }
 }
 
@@ -269,6 +418,38 @@ class TestClass
         }
 
         [Fact]
+        public async Task NamedArguments_LambdaWithoutCatch_ShouldReportDiagnostic()
+        {
+            var test = @"
+using System;
+using System.Threading;
+
+class TestClass
+{
+    void Test()
+    {
+        var t = new Timer(
+            callback: {|#0:_ =>
+            {
+                try
+                {
+                    Console.WriteLine(""Hello"");
+                }
+                finally
+                {
+                    //nop
+                }
+            }|},
+            state: null,
+            dueTime: 0,
+            period: 1000);
+    }
+}";
+            var expected = VerifyCS.Diagnostic("TIMER001").WithLocation(0);
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
         public async Task NamedArguments_LambdaWithTryCatch_ShouldNotReportDiagnostic()
         {
             var test = @"
@@ -319,6 +500,40 @@ class TestClass
     void Method(object state)
     {
         Console.WriteLine(""Hello""); // missing try/catch
+    }
+}";
+            var expected = VerifyCS.Diagnostic("TIMER001").WithLocation(0);
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
+        public async Task NamedArguments_MethodGroupWithoutTry_ShouldReportDiagnostic()
+        {
+            var test = @"
+using System;
+using System.Threading;
+
+class TestClass
+{
+    void Test()
+    {
+        var t = new Timer(
+            callback: {|#0:Method|},
+            state: null,
+            dueTime: 0,
+            period: 1000);
+    }
+
+    void Method(object state)
+    {
+        try
+        {
+            Console.WriteLine(""Hello"");       
+        }
+        finally
+        {
+            //nop
+        }
     }
 }";
             var expected = VerifyCS.Diagnostic("TIMER001").WithLocation(0);
